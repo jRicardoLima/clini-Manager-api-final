@@ -1,0 +1,14 @@
+<template>
+  <div>
+    <NavBar/>
+    <router-view></router-view>
+  </div>
+</template>
+<script>
+import NavBar from "../components/templateComponents/NavBar";
+export default{
+  components: {
+    NavBar
+  }
+}
+</script>
