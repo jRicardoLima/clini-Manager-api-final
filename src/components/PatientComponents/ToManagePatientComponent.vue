@@ -77,6 +77,7 @@
                 <WebCam
                     :displayModal="true"
                     :isOpen="true"
+                    :closeModalWebCam="closeModalWebCam"
                 />
               </template>
             </div>
@@ -506,6 +507,9 @@ export default {
     },
     openCamera(){
       this.openWebcam = true;
+    },
+    closeModalWebCam(){
+      this.openWebcam = false;
     }
   }
 }
