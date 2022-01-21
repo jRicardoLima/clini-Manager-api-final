@@ -2,6 +2,9 @@
 <div class="container-fluid mt-2">
     <div v-if="currentRouteName === 'patient'">
       <MenuPatientComponent :setResultSearch="setResultSearch"/>
+      <div v-if="renderTable === true" class="mt-2">
+        <TableDataPatientComponent :resultSearch="resultSearch"/>
+      </div>
     </div>
 
     <div v-if="currentRouteName === 'patientNew'">
@@ -13,8 +16,9 @@
 <script>
 import MenuPatientComponent from "@/components/PatientComponents/MenuPatientComponent";
 import ToManagePatientComponent from "@/components/PatientComponents/ToManagePatientComponent";
+import TableDataPatientComponent from "@/components/PatientComponents/TableDataPatientComponent";
 export default {
-  components: {ToManagePatientComponent, MenuPatientComponent},
+  components: {TableDataPatientComponent, ToManagePatientComponent, MenuPatientComponent},
   data(){
     return{
       resultSearch: null,

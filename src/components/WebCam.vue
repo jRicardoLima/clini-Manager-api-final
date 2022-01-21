@@ -50,7 +50,8 @@ export default {
   props:{
     displayModal: Boolean,
     isOpen: Boolean,
-    closeModalWebCam: Function
+    closeModalWebCam: Function,
+    setPhoto: Function,
   },
   data(){
     return{
@@ -80,6 +81,7 @@ export default {
       tracks.forEach(track => {
         track.stop();
       });
+      this.setPhoto(this.image);
       this.displayModal = false;
       this.closeModalWebCam();
     },

@@ -27,26 +27,23 @@ export default {
         {
           label:'Pacientes',
           icon:'pi pi-fw pi-users',
-          items:[
-            {
-              label: 'Pacientes',
-              command: () => {
-                this.$router.push({name: 'patient'});
-              }
-            }
-          ]
+          command: () => {
+            this.$router.push({name: 'patient'}).catch(() => {});
+          }
         },
         {
           label: 'Profissional Saúde',
           icon: 'pi pi-fw pi-heart',
-          items:[
-            {
-              label: 'Profissionais Saúde',
-              command: () => {
-                this.$router.push('/admin/profissional-saude');
-              }
-            }
-          ]
+          command: () => {
+            this.$router.push('/admin/profissional-saude');
+          }
+        },
+        {
+           label: 'Agendamentos',
+           icon: 'pi pi-book',
+           command: () => {
+             this.$router.push({name: 'schedule'}).catch(() => {});
+           }
         },
         {
           label:'Cadastros',
