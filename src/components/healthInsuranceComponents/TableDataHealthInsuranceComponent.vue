@@ -6,10 +6,8 @@
       class="p-datatable"
       showGridlines
       :rows="10"
-
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate="Mostrando {first} de {last} total de {totalRecords}"
-
       :filters.sync="filters"
       dataKey="id"
     >

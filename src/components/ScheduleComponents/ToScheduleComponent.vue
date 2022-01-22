@@ -14,6 +14,7 @@
                   v-model="patient.cpf"
                   @focusout="searchPatient"
                   @keyup.enter="searchPatient"
+                  @keydown.alt.enter="openHelpPatientMenu"
                   v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PACIENTE'"
                  />
                  <label for="cpf_patient">CPF Paciente</label>
@@ -42,7 +43,7 @@
                     v-model="healthProfessional.cpf"
                     @focusout="searchHealthProfessional"
                     @keyup.enter="searchHealthProfessional"
-                    @keydown.alt.enter="openHelpPatientMenu"
+                    @keydown.alt.enter="openHelpHealthProfessional"
                     v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PROFISSIONAL SAÚDE'"
                   />
                   <label for="cpf_health_professional">CPF Professional Saúde</label>
@@ -100,6 +101,26 @@
              </template>
            </div>
          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <template v-if="openModalHPatient === true">
+                <ModalHelpPatientComponent
+                  :displayModal="displayModalHelpPatient"
+                  :closeModal="closeModalHelpPatient"
+                />
+              </template>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <template v-if="openModalHHealthProfessinonal === true">
+                <ModalHelpEmployeeComponent
+                  :displayModal="displayModalHelpHealthProfessional"
+                  :closeModal="closeModalHelpHealthProfessional"
+                />\
+              </template>
+            </div>
+          </div>
         </TabPanel>
 
         <div class="row mt-2">
@@ -122,8 +143,12 @@
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import ModalScheduleComponents from "@/components/ScheduleComponents/ModalScheduleComponents";
+import ModalHelpPatientComponent from "@/components/PatientComponents/ModalHelpPatientComponent";
+import ModalHelpEmployeeComponent from "@/components/EmployeeComponents/ModalHelpEmployeeComponent";
 export default {
  components:{
+   ModalHelpEmployeeComponent,
+   ModalHelpPatientComponent,
    ModalScheduleComponents,
    TabView,
    TabPanel,
@@ -131,6 +156,10 @@ export default {
   data(){
    return{
      openModalSchedule: false,
+     openModalHelpPatient: false,
+     displayModalHelpPatient: false,
+     openModalHelpHealthProfessional: false,
+     displayModalHelpHealthProfessional: false,
      displayModal: true,
      schedule: {
        cpfPatient: '',
@@ -276,6 +305,12 @@ export default {
          && this.schedule.healthProfessional.specialtie !== "" && this.schedule.healthProfessional.specialtie !== undefined
          && this.schedule.healthProfessional.medicalProcedures !== "" && this.schedule.healthProfessional.medicalProcedures !== undefined;
 
+    },
+    openModalHPatient(){
+     return this.displayModalHelpPatient === true && this.openModalHelpPatient === true;
+    },
+    openModalHHealthProfessinonal(){
+      return this.displayModalHelpHealthProfessional === true && this.openModalHelpHealthProfessional === true;
     }
   },
   methods:{
@@ -321,7 +356,20 @@ export default {
       console.log(this.schedule);
     },
     openHelpPatientMenu(){
-      console.log('Funcionou');
+      this.displayModalHelpPatient = true;
+      this.openModalHelpPatient = true;
+    },
+    closeModalHelpPatient(){
+      this.displayModalHelpPatient = false;
+      this.openModalHelpPatient = false
+    },
+    openHelpHealthProfessional(){
+      this.displayModalHelpHealthProfessional = true;
+      this.openModalHelpHealthProfessional = true;
+    },
+    closeModalHelpHealthProfessional(){
+      this.displayModalHelpHealthProfessional = false;
+      this.openModalHelpHealthProfessional = false;
     }
   }
 }
