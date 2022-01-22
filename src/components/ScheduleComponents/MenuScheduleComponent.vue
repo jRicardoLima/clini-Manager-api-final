@@ -12,6 +12,7 @@
                 mask="99/99/9999"
                 placeholder="Periodo Inicial"
                 class="form-control"
+                v-model="schedule.periodIni"
              />
              <label for="date_schedule_ini">Periodo Inicial</label>
            </div>
@@ -24,6 +25,7 @@
               mask="99/99/9999"
               placeholder="Periodo Final"
               class="form-control"
+              v-model="schedule.periodFin"
             />
             <label for="date_schedule_fin">Periodo Final</label>
           </div>
@@ -35,13 +37,17 @@
               <Checkbox
                   :binary="true"
                   v-model="cpfOrName"
+                  @click="verifyInput"
+                  v-tooltip="'Selecione o CheckBox para Digitar o CPF'"
               />
             </span>
             <InputText
               id="name_or_cpf_patient"
               class="p-inputtext-lg form-control"
               placeholder="CPF/Nome Paciente"
-              v-model="selectNameOrCpf"
+              v-model="schedule.nameOrCpf"
+              @keyup="validateField($event,'name_or_cpf_patient')"
+              v-tooltip="'Selecione o CheckBox para Digitar o CPF'"
             />
           </div>
         </div>
@@ -77,6 +83,7 @@ import InputMask from "primevue/inputmask";
 import InputText from "primevue/inputtext";
 import Checkbox from "primevue/checkbox";
 import MultiSelect from "primevue/multiselect";
+import {allUpper, validCpf} from "@/helpers/Helpers";
 
 export default {
  components:{
@@ -90,16 +97,12 @@ export default {
   props:{
     setResultSearch: Function
   },
-  computed:{
-   selectNameOrCpf(){
-     return this.cpfOrName === true ? this.schedule.cpf : this.schedule.name;
-   }
-  },
   data(){
    return{
      schedule: {
        periodIni: '',
        periodFin: '',
+       nameOrCpf: '',
        name: '',
        cpf: '',
        healthProfessionalsSelected: []
@@ -207,7 +210,101 @@ export default {
        {
          label: 'Pesquisar',
          command: () => {
-
+            let response = [
+              {
+                id: 1,
+                dates: [
+                  {
+                    id: 1,
+                    scheduled: '25/01/2022'
+                  },
+                  {
+                    id: 2,
+                    scheduled: '29/01/2022'
+                  },
+                  {
+                    id: 3,
+                    scheduled: '05/02/2022'
+                  }
+                ],
+                patient:{
+                  id: 6,
+                  name: 'João Ricardo'
+                  /**
+                   * Restate dos dados do paciente
+                   */
+                },
+                healthProfessional: {
+                  id: 15,
+                  name: 'Jessica Dyana Mello dos Santos Lima',
+                  /**
+                   * Restante dos dados do profissional
+                   */
+                  specialtie: {
+                    id: 1,
+                    name: 'Psicologo'
+                    /**
+                     * Restante dos dados da especialidade
+                     */
+                  },
+                  medicalProcedure: {
+                    id: 3,
+                    name: 'TCC'
+                    /**
+                     * Restante dos dados do procedimento
+                     */
+                  }
+                }
+              },
+              {
+                id: 100,
+                dates: [
+                  {
+                    id: 4,
+                    scheduled: '28/02/2022'
+                  },
+                  {
+                    id: 10,
+                    scheduled: '08/03/2022'
+                  },
+                  {
+                    id: 9,
+                    scheduled: '15/03/2022'
+                  }
+                ],
+                patient:{
+                  id: 50,
+                  name: 'João Miguel'
+                  /**
+                   * Restate dos dados do paciente
+                   */
+                },
+                healthProfessional: {
+                  id: 22,
+                  name: 'Marta Aparecidade Vasconcelos',
+                  /**
+                   * Restante dos dados do profissional
+                   */
+                  specialtie: {
+                    id: 15,
+                    name: 'Dermatologista'
+                    /**
+                     * Restante dos dados da especialidade
+                     */
+                  },
+                  medicalProcedure: {
+                    id: 18,
+                    name: 'Consulta normal'
+                    /**
+                     * Restante dos dados do procedimento
+                     */
+                  }
+                }
+              }
+            ];
+            setTimeout(() => {
+              this.setResultSearch(response,true);
+            },3000);
          }
        },
        {
@@ -218,6 +315,30 @@ export default {
        }
      ],
    }
+  },
+  methods:{
+   validateField(event,nameInput){
+     if(this.cpfOrName === false){
+       switch (nameInput){
+         case 'name_or_cpf_patient':
+           this.schedule.nameOrCpf = allUpper(this.schedule.nameOrCpf);
+           break;
+       }
+     } else {
+       if(!validCpf(event.keyCode) && validCpf(event.keyCode) !== undefined){
+         this.schedule.nameOrCpf = "";
+         this.$toast.add({
+           severity: 'warn',
+           summary: 'INFORMAÇÃO DO SISTEMA',
+           detail: 'CARACTERE NÃO PERMITIDO',
+           life: 1500
+         });
+       }
+     }
+   },
+    verifyInput(){
+     this.schedule.nameOrCpf = "";
+    }
   }
 }
 </script>

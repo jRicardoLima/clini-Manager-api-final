@@ -14,6 +14,7 @@
                   v-model="patient.cpf"
                   @focusout="searchPatient"
                   @keyup.enter="searchPatient"
+                  v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PACIENTE'"
                  />
                  <label for="cpf_patient">CPF Paciente</label>
                </template>
@@ -41,6 +42,8 @@
                     v-model="healthProfessional.cpf"
                     @focusout="searchHealthProfessional"
                     @keyup.enter="searchHealthProfessional"
+                    @keydown.alt.enter="openHelpPatientMenu"
+                    v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PROFISSIONAL SAÚDE'"
                   />
                   <label for="cpf_health_professional">CPF Professional Saúde</label>
                 </template>
@@ -58,7 +61,7 @@
             </div>
 
             <div class="col-md-3">
-              <select class="form-select"  style="padding-top: 15px; padding-bottom: 15px">
+              <select class="form-select" v-model="schedule.healthProfessional.specialtie" style="padding-top: 15px; padding-bottom: 15px">
                 <option value="">SELECIONE A ESPECIALIDADE</option>
                 <template v-if="specialtiesHealth !== null">
                   <option v-for="(specialtie,index) in specialtiesHealth" :key="index">
@@ -69,7 +72,7 @@
             </div>
 
             <div class="col-md-3">
-              <select class="form-select"  style="padding-top: 15px; padding-bottom: 15px">
+              <select class="form-select"  v-model="schedule.healthProfessional.medicalProcedures" style="padding-top: 15px; padding-bottom: 15px">
                 <option value="">SELECIONE O PROCEDIMENTO</option>
                 <template v-if="HealthProcedures !== null">
                   <option v-for="(medicalProcedure,index) in HealthProcedures" :key="index">
@@ -79,7 +82,38 @@
               </select>
             </div>
           </div>
+         <div class="row mt-2">
+           <div class="col-md-1">
+             <button class="btn btn-info" style="width: 80px" @click="openSchedule">
+               <i class="fas fa-calendar-alt"></i>
+             </button>
+           </div>
+         </div>
+         <div class="row">
+           <div class="col-md-12">
+             <template v-if="openModalSchedule === true">
+               <ModalScheduleComponents
+                :displayModal="displayModal"
+                :setSchedule="setSchedule"
+                :closeModalSchedule="closeModalSchedule"
+               />
+             </template>
+           </div>
+         </div>
         </TabPanel>
+
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <button
+                id="btn_save_schedule"
+                class="btn btn-success btn-sm"
+                style="width: 250px"
+                @click="saveData"
+            >
+              <i class="fas fa-check"></i> Salvar
+            </button>
+          </div>
+        </div>
       </TabView>
   </div>
 </template>
@@ -87,129 +121,31 @@
 <script>
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
-
+import ModalScheduleComponents from "@/components/ScheduleComponents/ModalScheduleComponents";
 export default {
  components:{
+   ModalScheduleComponents,
    TabView,
    TabPanel,
  },
   data(){
    return{
+     openModalSchedule: false,
+     displayModal: true,
+     schedule: {
+       cpfPatient: '',
+       dateSchedule: [],
+       healthProfessional:{
+        cpfHealthProfessional: '',
+        specialtie: '',
+        medicalProcedures: ''
+       }
+     },
      specialties: [],
      healthProcedures: [],
      patients:[
        {
-         id: '1',
-         name: 'JOÃO RICARDO LIMA',
-         cpf: '02315478941',
-         rg: '25352523',
-         birthDate: '19/11/1992',
-         information: 'OBS',
-         address: {
-           city: 'PRIMAVERA DO LESTE',
-           zipecode: '',
-           street: 'FLOR DE LIZ',
-           neighborhood: 'PIONEIRO',
-           federate_unit: 'MT',
-           telphone_one: '65 996239237',
-           has_main_telphone_one: true,
-           telphone_two: '65 999291300',
-           has_main_telphone_two: false,
-           email: 'j.ricard_lima@outlook.com',
-         },
-         health_info: {
-           comorbidities: [
-             {name: 'TESTE 1'},
-             {name: 'TESTE 2'},
-             {name: 'TESTE 3'}
-           ],
-         },
-         useDrugs: {
-           drugs: [
-             {name: 'DROGA 1'},
-             {name: 'DROGA 2'},
-             {name: 'DROGA 3'},
-             {name: 'DROGA 4'},
-             {name: 'DROGA 5'}
-           ],
-         }
-       },
-
-       {
-         id: '2',
-         name: 'JOÃO RICARDO LIMA',
-         cpf: '01257412369',
-         rg: '25352523',
-         birthDate: '19/11/1992',
-         information: 'OBS',
-         address: {
-           city: 'PRIMAVERA DO LESTE',
-           zipecode: '',
-           street: 'FLOR DE LIZ',
-           neighborhood: 'PIONEIRO',
-           federate_unit: 'MT',
-           telphone_one: '65 996239237',
-           has_main_telphone_one: true,
-           telphone_two: '65 999291300',
-           has_main_telphone_two: false,
-           email: 'j.ricard_lima@outlook.com',
-         },
-         health_info: {
-           comorbidities: [
-             {name: 'TESTE 1'},
-             {name: 'TESTE 2'},
-             {name: 'TESTE 3'}
-           ],
-         },
-         useDrugs: {
-           drugs: [
-             {name: 'DROGA 1'},
-             {name: 'DROGA 2'},
-             {name: 'DROGA 3'},
-             {name: 'DROGA 4'},
-             {name: 'DROGA 5'}
-           ],
-         }
-       },
-       {
          id: '3',
-         name: 'JOÃO RICARDO LIMA',
-         cpf: '03265987412',
-         rg: '25352523',
-         birthDate: '19/11/1992',
-         information: 'OBS',
-         address: {
-           city: 'PRIMAVERA DO LESTE',
-           zipecode: '',
-           street: 'FLOR DE LIZ',
-           neighborhood: 'PIONEIRO',
-           federate_unit: 'MT',
-           telphone_one: '65 996239237',
-           has_main_telphone_one: true,
-           telphone_two: '65 999291300',
-           has_main_telphone_two: false,
-           email: 'j.ricard_lima@outlook.com',
-         },
-         health_info: {
-           comorbidities: [
-             {name: 'TESTE 1'},
-             {name: 'TESTE 2'},
-             {name: 'TESTE 3'}
-           ],
-         },
-         useDrugs: {
-           drugs: [
-             {name: 'DROGA 1'},
-             {name: 'DROGA 2'},
-             {name: 'DROGA 3'},
-             {name: 'DROGA 4'},
-             {name: 'DROGA 5'}
-           ],
-         }
-       },
-
-       {
-         id: 4,
          name: 'JOÃO RICARDO LIMA',
          cpf: '03389454152',
          rg: '25352523',
@@ -246,46 +182,6 @@ export default {
        },
      ],
      healthProfessionals: [
-       {
-         id: 1,
-         name: 'FUNCIONARIO TESTE',
-         cpf: '02541541515',
-         professional_register: '',
-         health_professional: true,
-         occupation: {
-           id: 1,
-           name: 'Função 1',
-         },
-         salary: 1500.00,
-         email: "jrolsd@xtx.com.br",
-         address:{
-           id: 1,
-           city: 'cidade Teste',
-           street: "asdasdsdsfasefwefwdasd",
-           neighborhood:"asdasdefreer",
-           zipcode: "325252514",
-           federate_unit: "MT",
-           telphone_one: "",
-           telphone_two:"887788-78787"
-
-         },
-         specialties:[
-           {
-             id: 5,
-             name: 'Especialidade 1',
-             medicalProcedures: [
-               {
-                 id: 2,
-                 name: 'Procedimento 4'
-               },
-               {
-                 id: 3,
-                 name: 'Procedimento 5'
-               }
-             ]
-           }
-         ]
-       },
        {
          id: 2,
          name: 'FUNCIONARIO TESTE blablabal',
@@ -340,99 +236,6 @@ export default {
            }
          ]
        },
-       {
-         id: 3,
-         name: 'FUNCIONARIO TESTE',
-         cpf: '02541541515',
-         professional_register: '',
-         health_professional: true,
-         occupation: {
-           id: 2,
-           name: 'Função 2',
-         },
-         salary: 2500.00,
-         email: "jrolsd@xtx.com.br",
-         address:{
-           id: 3,
-           city: 'cidade Teste',
-           street: "asdasdsdsfasefwefwdasd",
-           neighborhood:"asdasdefreer",
-           zipcode: "325252514",
-           federate_unit: "MT",
-           telphone_one: "",
-           telphone_two:"887788-78787"
-
-         },
-         specialties:[
-           {
-             id: 2,
-             name: 'Especialidade 6',
-             medicalProcedures: [
-               {
-                 id: 9,
-                 name: 'Procedimento 4'
-               },
-               {
-                 id: 7,
-                 name: 'Procedimento 5'
-               }
-             ]
-           },
-           {
-             id: 9,
-             name: 'Especialidade 10',
-             medicalProcedures: [
-               {
-                 id: 8,
-                 name: 'Procedimento 6'
-               }
-             ]
-           }
-         ]
-       },
-       {
-         id: 4,
-         name: 'FUNCIONARIO TESTE',
-         cpf: '02541541515',
-         professional_register: 'abc5415415',
-         health_professional: true,
-         occupation: {
-           id: 4,
-           name: 'Função 4',
-         },
-         salary: 6000.00,
-         email: "jrolsd@xtx.com.br",
-         address:{
-           id: 4,
-           city: 'cidade Teste',
-           street: "asdasdsdsfasefwefwdasd",
-           neighborhood:"asdasdefreer",
-           zipcode: "325252514",
-           federate_unit: "MT",
-           telphone_one: "",
-           telphone_two:"887788-78787"
-         },
-         specialties:[
-           {
-             id: 2,
-             name: 'Especialidade 6',
-             medicalProcedures: [
-               {
-                 id: 9,
-                 name: 'Procedimento 4'
-               },
-               {
-                 id: 7,
-                 name: 'Procedimento 5'
-               },
-               {
-                 id: 8,
-                 name: 'Procedimento 6'
-               }
-             ]
-           },
-         ]
-       },
      ],
      patient:{
        cpf: '',
@@ -449,7 +252,7 @@ export default {
      return this.patient.name !== "" && this.patient.name !== undefined;
    },
    foundHealthProfessional(){
-     return this.healthProfessional.name !== "" && this.healthProfessional.name !== undefined
+     return this.healthProfessional.name !== "" && this.healthProfessional.name !== undefined;
    },
     specialtiesHealth(){
       if(this.specialties !== [] && this.specialties !== undefined
@@ -464,6 +267,15 @@ export default {
        return this.healthProcedures;
      }
      return null;
+    },
+    isSchedule(){
+     return this.patient.cpf !== ""
+         && this.patient.cpf !== undefined
+         && this.healthProfessional.cpf !== ""
+         && this.healthProfessional.cpf !== undefined
+         && this.schedule.healthProfessional.specialtie !== "" && this.schedule.healthProfessional.specialtie !== undefined
+         && this.schedule.healthProfessional.medicalProcedures !== "" && this.schedule.healthProfessional.medicalProcedures !== undefined;
+
     }
   },
   methods:{
@@ -489,6 +301,28 @@ export default {
         });
       }
     },
+    setSchedule(days){
+      if(days !== [] && days !== undefined){
+        this.schedule.dateSchedule = days;
+      }
+    },
+    closeModalSchedule(){
+      this.displayModal = false;
+      this.openModalSchedule = false;
+    },
+    openSchedule(){
+      if(this.isSchedule === true){
+        this.schedule.cpfPatient = this.patient.cpf;
+        this.schedule.healthProfessional.cpfHealthProfessional = this.healthProfessional.cpf;
+        this.openModalSchedule = true;
+      }
+    },
+    saveData(){
+      console.log(this.schedule);
+    },
+    openHelpPatientMenu(){
+      console.log('Funcionou');
+    }
   }
 }
 </script>
