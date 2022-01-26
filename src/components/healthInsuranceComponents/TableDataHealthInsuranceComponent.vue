@@ -6,10 +6,8 @@
       class="p-datatable"
       showGridlines
       :rows="10"
-      responsiveLayout="scroll"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate="Mostrando {first} de {last} total de {totalRecords}"
-      scrollHeight="400px"
       :filters.sync="filters"
       dataKey="id"
     >

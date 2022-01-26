@@ -9,6 +9,8 @@ import EmployeeView from "@/views/EmployeeView";
 import OccupationView from "@/views/OccupationView";
 import PatientView from "@/views/PatientView";
 import HelloWorld from "@/components/HelloWorld";
+import ScheduleView from "@/views/ScheduleView";
+import QueueView from "@/views/QueueView";
 Vue.use(Router);
 
 const router = new Router({
@@ -77,6 +79,20 @@ const router = new Router({
                     children: [
                         {path:'novo',component: PatientView,name:'patientNew'},
                     ]
+                },
+                {
+                    path: "Agendamentos",
+                    component: ScheduleView,
+                    name: 'schedule',
+                    children: [
+                        {path: 'novo',component: ScheduleView,name:'scheduleNew'}
+                    ]
+                },
+                {
+                    path:"Profissional-saude",
+                    component: QueueView,
+                    name:'queue',
+                    children:[]
                 },
                 {
                     path:'teste',

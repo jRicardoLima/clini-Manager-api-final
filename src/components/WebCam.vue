@@ -3,11 +3,21 @@
  <Dialog
   header="Foto Paciente"
   :visible.sync="displayModal"
-  :style="{width: '50vw'}"
+  :style="{width: '35vw'}"
   :modal="true"
   :closable="false"
  >
    <div class="row">
+     <div class="col-md-4">
+       <button class="btn btn-success" @click="takeSnapShot">
+         Tirar Foto
+       </button>
+     </div>
+     <div class="col-md-3">
+       <button class="btn btn-warning" @click="closeCamera">Fechar</button>
+     </div>
+   </div>
+   <div class="row mt-2">
      <div class="col-md-4">
        <video
            :autoplay="isOpen"
@@ -15,25 +25,13 @@
            class="styleVideo"
        ></video>
      </div>
-     <div class="col-md-4">
-       <button class="btn btn-success" @click="takeSnapShot">
-         Tirar Foto
-       </button>
-     </div>
    </div>
-   <div  v-if="showPhoto" class="photo-patient">
-     <img
-         :src="image"
-     />
+   <div  v-if="showPhoto">
+     <img :src="image"/>
    </div>
-   <div class="row">
+   <div class="row" >
      <div class="col-md-12">
-       <canvas ref="canvas"></canvas>
-     </div>
-   </div>
-   <div class="row">
-     <div class="col-md-4">
-       <button class="btn btn-info" @click="closeCamera">Fechar</button>
+       <canvas ref="canvas" class="photo-patient"></canvas>
      </div>
    </div>
  </Dialog>
@@ -52,6 +50,8 @@ export default {
   props:{
     displayModal: Boolean,
     isOpen: Boolean,
+    closeModalWebCam: Function,
+    setPhoto: Function,
   },
   data(){
     return{
@@ -81,15 +81,15 @@ export default {
       tracks.forEach(track => {
         track.stop();
       });
+      this.setPhoto(this.image);
       this.displayModal = false;
+      this.closeModalWebCam();
     },
     takeSnapShot(){
       const video = this.$refs.webCamera;
 
       const canvas = this.$refs.canvas;
-      //canvas.width = video.videoWidth;
-      //canvas.height = video.videoHeight;
-      canvas.width = 180;
+      canvas.width = 236;
       canvas.height = 180;
       let ctx = canvas.getContext('2d');
 
@@ -106,7 +106,6 @@ export default {
     height: 180px;
   }
   .photo-patient{
-    margin-right: -120px;
-    border: 4px solid black;
+    margin-left: -200px;
   }
 </style>

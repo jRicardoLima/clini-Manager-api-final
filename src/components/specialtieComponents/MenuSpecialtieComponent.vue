@@ -48,7 +48,7 @@
 <script>
 import Panel from "primevue/panel";
 import SplitButton from "primevue/splitbutton";
-import {onlyNumbers} from "../../helpers/Helpers";
+import {onlyNumbers} from "@/helpers/Helpers";
 
 export default {
   components:{

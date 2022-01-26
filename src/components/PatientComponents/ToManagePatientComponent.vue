@@ -70,6 +70,15 @@
               </button>
             </div>
           </div>
+          <div class="d-flex justify-content-start mt-2">
+            <div class="row">
+              <div class="col-md-12">
+                <template v-if="patient.photo !== ''">
+                  <img alt="Foto Paciente" :src="patient.photo" class="photo-patient"/>
+                </template>
+              </div>
+            </div>
+          </div>
 
           <div class="row mt-2">
             <div class="col-md-12">
@@ -77,6 +86,8 @@
                 <WebCam
                     :displayModal="true"
                     :isOpen="true"
+                    :closeModalWebCam="closeModalWebCam"
+                    :setPhoto="setPhoto"
                 />
               </template>
             </div>
@@ -232,7 +243,7 @@
                     class="form-control"
                     placeholder="Comorbidade"
                     :readonly="readyOnlyShowComorbidy === false"
-                    v-model="patient.health_info.comorbidy.name"
+                    v-model="comorbidy.name"
                     @keyup="upWord('name_comorbidy_patient')"
                 />
                 <label for="name_comorbidy_patient">Comorbidade</label>
@@ -255,7 +266,7 @@
                     class="form-control"
                     placeholder="Medicamento"
                     :readonly="readyOnlyShowUseDrugs === false"
-                    v-model="patient.useDrugs.drug.name"
+                    v-model="drug.name"
                     @keyup="upWord('name_drug_patient')"
                 />
                 <label for="name_drug_patient">Medicamento</label>
@@ -350,6 +361,7 @@ export default {
         rg: '',
         birthDate: '',
         information: '',
+        photo: '',
         address: {
           city: '',
           zipecode: '',
@@ -366,15 +378,9 @@ export default {
         },
         health_info: {
           comorbidities: [],
-          comorbidy: {
-            name: ''
-          },
         },
         useDrugs: {
           drugs: [],
-          drug: {
-            name: ''
-          }
         }
       },
       selectedComorbidy: null,
@@ -382,6 +388,12 @@ export default {
       has_comorbidities: false,
       has_use_drugs: false,
       openWebcam: false,
+      comorbidy: {
+        name: ''
+      },
+      drug: {
+        name: ''
+      }
     }
   },
   watch:{
@@ -412,17 +424,17 @@ export default {
   },
   methods: {
     addComorbities() {
-      if(this.patient.health_info.comorbidy.name !== ""){
-        this.patient.health_info.comorbidities.push(this.patient.health_info.comorbidy);
-        this.patient.health_info.comorbidy = {
+      if(this.comorbidy.name !== ""){
+        this.patient.health_info.comorbidities.push(this.comorbidy);
+        this.comorbidy = {
           name: ''
         };
       }
     },
     addUseDrugs(){
-      if(this.patient.useDrugs.drug.name !== ""){
-        this.patient.useDrugs.drugs.push(this.patient.useDrugs.drug);
-        this.patient.useDrugs.drug = {
+      if(this.drug.name !== ""){
+        this.patient.useDrugs.drugs.push(this.drug);
+        this.drug = {
           name: ''
         }
       }
@@ -497,16 +509,24 @@ export default {
           this.patient.address.neighborhood = allUpper(this.patient.address.neighborhood);
           break;
         case 'name_comorbidy_patient':
-          this.patient.health_info.comorbidy.name = allUpper(this.patient.health_info.comorbidy.name);
+          this.comorbidy.name= allUpper(this.comorbidy.name);
           break;
         case 'name_drug_patient':
-          this.patient.useDrugs.drug.name = allUpper(this.patient.useDrugs.drug.name);
+          this.drug.name = allUpper(this.drug.name);
           break;
       }
     },
     openCamera(){
       this.openWebcam = true;
-    }
+    },
+    closeModalWebCam(){
+      this.openWebcam = false;
+    },
+    setPhoto(photo){
+      if(photo !== "" && photo !== null && photo !== undefined){
+        this.patient.photo = photo;
+      }
+    },
   }
 }
 </script>
@@ -542,6 +562,11 @@ export default {
     position: relative;
     top: 10px;
     left:  560px;
+  }
+  .photo-patient{
+    width: 120px;
+    border-radius: 40px;
+
   }
 
   @media (min-width: 375px) and (max-width: 414px) {

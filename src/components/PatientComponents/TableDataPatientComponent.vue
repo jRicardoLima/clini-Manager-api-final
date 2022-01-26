@@ -6,10 +6,8 @@
         class="p-datatable"
         showGridlines
         :rows="10"
-        responsiveLayout="scroll"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         currentPageReportTemplate="Mostrando {first} de {last} total de {totalRecords}"
-        scrollHeight="400px"
         :filters.sync="filters"
         dataKey="id"
     >
@@ -34,10 +32,22 @@
         </template>
       </Column>
 
-      <Column field="telphone_one" header="Telefone 1"/>
-      <Column field="telphone_two" header="Telefone 2"/>
+      <Column header="Telefone 1">
+        <template #body="slotsProps">
+          {{slotsProps.data.address.telphone_one}}
+        </template>
+      </Column>
+      <Column header="Telefone 2">
+        <template #body="slotsProps">
+          {{slotsProps.data.address.telphone_two}}
+        </template>
+      </Column>
 
-      <Column field="email" header="E-Mail"/>
+      <Column header="E-Mail">
+        <template #body="slotsProps">
+          {{slotsProps.data.address.email}}
+        </template>
+      </Column>
 
       <Column header="Ações">
         <template #body="slotsProps">
