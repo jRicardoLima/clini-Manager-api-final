@@ -35,7 +35,7 @@ export default {
           label: 'Profissional Saúde',
           icon: 'pi pi-fw pi-heart',
           command: () => {
-            this.$router.push('/admin/profissional-saude');
+            this.$router.push({name:'queue'}).catch(() => {});
           }
         },
         {

@@ -30,9 +30,9 @@ export default {
         label: 'Editar',
         command: () => {
           if(this.showTypeHealthInsurance === false){
-            this.$router.push({name:'healthInsuranceEdit',params:{id: this.optionData.data.id}});
+            this.$router.push({name:'healthInsuranceEdit',params:{id: this.optionData.data.id}}).catch(() => {});
           } else {
-            this.$router.push({name: 'typeHealthInsuranceEdit',params:{id: this.optionData.data.id}});
+            this.$router.push({name: 'typeHealthInsuranceEdit',params:{id: this.optionData.data.id}}).catch(() => {});
           }
 
         }

@@ -13,6 +13,7 @@
                   placeholder="CPF Paciente"
                   v-model="patient.cpf"
                   @focusout="searchPatient"
+                  @keyup="validateCpfPatient"
                   @keyup.enter="searchPatient"
                   @keydown.alt.enter="openHelpPatientMenu"
                   v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PACIENTE'"
@@ -42,6 +43,7 @@
                     placeholder="CPF Profissional Saúde"
                     v-model="healthProfessional.cpf"
                     @focusout="searchHealthProfessional"
+                    @keyup="validateCpfHealthProfessional"
                     @keyup.enter="searchHealthProfessional"
                     @keydown.alt.enter="openHelpHealthProfessional"
                     v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PROFISSIONAL SAÚDE'"
@@ -145,6 +147,7 @@ import TabPanel from "primevue/tabpanel";
 import ModalScheduleComponents from "@/components/ScheduleComponents/ModalScheduleComponents";
 import ModalHelpPatientComponent from "@/components/PatientComponents/ModalHelpPatientComponent";
 import ModalHelpEmployeeComponent from "@/components/EmployeeComponents/ModalHelpEmployeeComponent";
+import {validCpf} from "@/helpers/Helpers";
 export default {
  components:{
    ModalHelpEmployeeComponent,
@@ -370,6 +373,28 @@ export default {
     closeModalHelpHealthProfessional(){
       this.displayModalHelpHealthProfessional = false;
       this.openModalHelpHealthProfessional = false;
+    },
+    validateCpfPatient(event){
+      if(!validCpf(event.keyCode) && validCpf(event.keyCode) !== undefined){
+        this.patient.cpf = "";
+        this.$toast.add({
+          severity:'warn',
+          summary:'INFORMAÇÃO DO SISTEMA',
+          detail:'CARACTERE NÃO PERMITIDO',
+          life:1500
+        });
+      }
+    },
+    validateCpfHealthProfessional(event){
+      if(!validCpf(event.keyCode) && validCpf(event.keyCode) !== undefined){
+        this.healthProfessional.cpf = "";
+        this.$toast.add({
+          severity:'warn',
+          summary:'INFORMAÇÃO DO SISTEMA',
+          detail:'CARACTERE NÃO PERMITIDO',
+          life:1500
+        });
+      }
     }
   }
 }
