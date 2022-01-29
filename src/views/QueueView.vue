@@ -13,15 +13,19 @@
         />
       </div>
     </div>
+
+    <div v-if="currentRouteName === 'medicalRecord'">
+        <MedicalRecordComponent/>
+    </div>
   </div>
 </template>
 
 <script>
 import QueueComponent from "@/components/HealthProfessionalComponents/QueueComponent";
 import TableDataQueueComponent from "@/components/HealthProfessionalComponents/TableDataQueueComponent";
-
+import MedicalRecordComponent from "@/components/HealthProfessionalComponents/MedicalRecordComponent";
 export default {
-  components: {TableDataQueueComponent, QueueComponent},
+  components: {TableDataQueueComponent, QueueComponent,MedicalRecordComponent},
   data(){
     return{
       resultSearch: null,

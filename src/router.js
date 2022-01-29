@@ -92,7 +92,9 @@ const router = new Router({
                     path:"Profissional-saude",
                     component: QueueView,
                     name:'queue',
-                    children:[]
+                    children:[
+                        {path:":id/prontuario",component:QueueView,name:"medicalRecord"}
+                    ]
                 },
                 {
                     path:'teste',
