@@ -1,5 +1,5 @@
 <template>
-    <Accordion id="acc">
+    <Accordion>
         <AccordionTab header="Anamnese">
            <Editor
              id="anamnese"
@@ -54,6 +54,7 @@ import FileUpload from "primevue/fileupload";
 import DynamicLink from "@/components/DynamicLink";
 import ManagerFiles from "@/services/ManagerFiles.js";
 import Editor from "primevue/editor";
+
 export default{
     components:{
         Accordion,
@@ -62,6 +63,10 @@ export default{
         FileUpload,
         DynamicLink,
         Editor
+    },
+    props:{
+      setInfoMedicalRecord: Function,
+      executeMedicalRecord: Boolean
     },
     managerFiles: null,
     beforeMount(){
@@ -76,6 +81,14 @@ export default{
                  text: ''
              }
         }
+    },
+    watch:{
+      executeMedicalRecord(){
+        if(this.executeMedicalRecord == true){
+            this.anamnese.files = this.managerFiles.convertBaseToDownload();
+            this.setInfoMedicalRecord(this.anamnese);
+        }
+      }
     },
     methods:{
         showFiles(){
@@ -102,7 +115,7 @@ export default{
                 });
                 this.$refs.clearUpload.clear();
             }
-        }
+        },
     }
 }
 </script>
