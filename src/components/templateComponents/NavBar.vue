@@ -1,5 +1,6 @@
 <template>
-  <Menubar :model="items">
+  <div class="container-fluid">
+    <Menubar :model="items">
     <template #start>
       <Avatar image="/pessoa.jpg" size="large" shape="circle"/>
     </template>
@@ -8,6 +9,7 @@
       <Button label="Sair" icon="pi pi-power-off" class="p-button-secondary p-button-text"/>
     </template>
   </Menubar>
+  </div>
 </template>
 <script>
 import Menubar from "primevue/menubar";
@@ -95,7 +97,10 @@ export default {
               label: "Conciliação Bancária"
             },
             {
-              label: "Fechamento Mensal"
+              label: "Fechamento Mensal" 
+            },
+            {
+              label: "Faturamento TISS"
             }
           ]
         }
@@ -127,9 +132,6 @@ export default {
   }
 }
 </script>
-<style scoped>
-.p-menubar{
-  margin-top: -40px !important;
-  background-color: #CACFD1 !important;
-}
+<style scope>
+
 </style>

@@ -28,7 +28,7 @@ export default {
       {
         label: 'Editar',
         command: () => {
-          this.$router.push({name:'employeeEdit',params:{id:this.optionData.data.id}});
+          this.$router.push({name:'employeeEdit',params:{id:this.optionData.data.id}}).catch(() => {});
         }
       },
       {

@@ -85,6 +85,18 @@
               </select>
             </div>
           </div>
+          <div class="row mt-2">
+           <div class="col-md-4">
+             <select class="form-select" style="padding-top: 15px; padding-bottom: 15px">
+               <option value="">TIPO PAGAMENTO</option>
+               <option value="in_cash">Á Vista</option>
+               <option value="health_insurance">Plano de Saúde</option>
+               <option value="parcel">Parcelado</option>
+             </select>
+           </div>
+
+           
+         </div>
          <div class="row mt-2">
            <div class="col-md-1">
              <button class="btn btn-info" style="width: 80px" @click="openSchedule">
@@ -92,6 +104,7 @@
              </button>
            </div>
          </div>
+         
          <div class="row">
            <div class="col-md-12">
              <template v-if="openModalSchedule === true">

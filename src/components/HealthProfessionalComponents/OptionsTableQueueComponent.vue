@@ -28,7 +28,7 @@ export default {
       {
         label: 'Iniciar Atendimento',
         command: () => {
-
+          this.$router.push({name:"medicalRecord",params:{id:this.optionData.data.id}}).catch(() => {});
         }
       },
     ]

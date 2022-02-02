@@ -1,6 +1,6 @@
 <template>
   <div class="card p-mt-3">
-    <TabView>
+    <TabView :scrollable="true">
       <TabPanel header="Geral">
         <div class="row">
           <div class="col-md-6">
