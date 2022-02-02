@@ -1,7 +1,7 @@
 <template>
   <!-- Colocar um select para selecionar o tipo do plano de saúde-->
   <div class="card mt-3">
-      <TabView>
+      <TabView :scrollable="true">
         <TabPanel header="Geral">
           <div class="row">
             <div class="col-md-4">

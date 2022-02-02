@@ -1,5 +1,5 @@
 <template>
-    <Accordion>
+    <Accordion class="customAccordion">
         <AccordionTab header="Anamnese">
            <Editor
              id="anamnese"
@@ -120,8 +120,6 @@ export default{
 }
 </script>
 
-<style scoped>
-.p-accordion .p-accordion-header{
-   background: violet !important;
- }
+<style scope>
+
 </style>

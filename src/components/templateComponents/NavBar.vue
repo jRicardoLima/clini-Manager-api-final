@@ -97,7 +97,10 @@ export default {
               label: "Conciliação Bancária"
             },
             {
-              label: "Fechamento Mensal"
+              label: "Fechamento Mensal" 
+            },
+            {
+              label: "Faturamento TISS"
             }
           ]
         }
@@ -129,12 +132,6 @@ export default {
   }
 }
 </script>
-<style scoped>
-.p-menubar{
-  margin-top: -40px !important;
-  background-color: #B8D6E2 !important;
-}
-.p-menuitem{
-  font-weight: bold !important;
-}
+<style scope>
+
 </style>

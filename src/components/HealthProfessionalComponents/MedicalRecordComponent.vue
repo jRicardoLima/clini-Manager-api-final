@@ -2,7 +2,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
-                <Panel header="Paciente">
+                <Panel header="Paciente" class="customPanel">
+                 <ScrollPanel style="height: 500px" class="customScroll">   
                    <div class="d-flex d-flex-row">
                        <Avatar image="/pessoa.jpg" size="large"/> <span class=" ms-3 mt-2">João Ricardo Lima 29 anos</span>
                    </div>
@@ -33,10 +34,11 @@
                           optionLabel="date"
                        />
                    </div>
+                 </ScrollPanel>  
                 </Panel>
             </div>
             <div class="col-md-8">
-                <Panel header="Prontuário">
+                <Panel header="Prontuário" class="customPanel">
                     <div class="mt-2">
                       <AnamneseComponent
                         :executeMedicalRecord="executeMedicalRecord"
@@ -82,6 +84,7 @@
 import Panel from "primevue/panel";
 import Avatar from "primevue/avatar";
 import Listbox from "primevue/listbox";
+import ScrollPanel from "primevue/scrollpanel";
 import AnamneseComponent from "@/components/HealthProfessionalComponents/MedicalRecordComponents/AnamneseComponent";
 import DiagnosticHypothesisComponent from "@/components/HealthProfessionalComponents/MedicalRecordComponents/DiagnosticHypothesisComponent";
 import DefinitiveDiagnosticComponent from "@/components/HealthProfessionalComponents/MedicalRecordComponents/DefinitiveDiagnosticComponent";
@@ -94,6 +97,7 @@ import MedicalReleaseComponent from "@/components/HealthProfessionalComponents/M
             Panel,
             Avatar,
             Listbox,
+            ScrollPanel,
             AnamneseComponent,
             DiagnosticHypothesisComponent,
             DefinitiveDiagnosticComponent,
@@ -129,6 +133,7 @@ import MedicalReleaseComponent from "@/components/HealthProfessionalComponents/M
     }
 </script>
 
-<style>
-   
+<style scope>
+
+
 </style>

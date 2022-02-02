@@ -1,5 +1,5 @@
 <template>
-  <Panel class="p-mt-3">
+  <Panel class="mt-2">
     <template #header>
       <h4>Menu Especialidades</h4>
     </template>
