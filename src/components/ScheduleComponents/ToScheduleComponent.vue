@@ -15,7 +15,7 @@
                   @focusout="searchPatient"
                   @keyup="validateCpfPatient"
                   @keyup.enter="searchPatient"
-                  @keydown.alt.enter="openHelpPatientMenu"
+                  @keydown.alt.enter="openGenericModal('ShortPatientComponent')"
                   v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PACIENTE'"
                  />
                  <label for="cpf_patient">CPF Paciente</label>
@@ -45,7 +45,7 @@
                     @focusout="searchHealthProfessional"
                     @keyup="validateCpfHealthProfessional"
                     @keyup.enter="searchHealthProfessional"
-                    @keydown.alt.enter="openHelpHealthProfessional"
+                    @keydown.alt.enter="openGenericModal('ShortEmployeeComponent')"
                     v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PROFISSIONAL SAÚDE'"
                   />
                   <label for="cpf_health_professional">CPF Professional Saúde</label>
@@ -85,26 +85,22 @@
               </select>
             </div>
           </div>
-          <div class="row mt-2">
-           <div class="col-md-4">
-             <select class="form-select" style="padding-top: 15px; padding-bottom: 15px">
-               <option value="">TIPO PAGAMENTO</option>
-               <option value="in_cash">Á Vista</option>
-               <option value="health_insurance">Plano de Saúde</option>
-               <option value="parcel">Parcelado</option>
-             </select>
-           </div>
-
-           
-         </div>
          <div class="row mt-2">
            <div class="col-md-1">
              <button class="btn btn-info" style="width: 80px" @click="openSchedule">
                <i class="fas fa-calendar-alt"></i>
              </button>
            </div>
+           <div class="col-md-1" v-if="typePaymentMedicalAppointment === true">
+             <button 
+                class="btn btn-info" 
+                style="width: 80px" 
+                @click="openGenericModal('ShortTypePaymentComponent')"
+             >
+                <i class="fas fa-money-bill-alt"></i>
+             </button>
+           </div>
          </div>
-         
          <div class="row">
            <div class="col-md-12">
              <template v-if="openModalSchedule === true">
@@ -116,39 +112,28 @@
              </template>
            </div>
          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <template v-if="openModalHPatient === true">
-                <ModalHelpPatientComponent
-                  :displayModal="displayModalHelpPatient"
-                  :closeModal="closeModalHelpPatient"
-                />
-              </template>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <template v-if="openModalHHealthProfessinonal === true">
-                <ModalHelpEmployeeComponent
-                  :displayModal="displayModalHelpHealthProfessional"
-                  :closeModal="closeModalHelpHealthProfessional"
-                />\
-              </template>
-            </div>
-          </div>
+          <div class="row" v-if="this.genericModal.displayModal === true">
+           <div class="col-md-12">
+             <GenericModal
+               :headerName="this.genericModal.headerName"
+               :displayModal="this.genericModal.displayModal"
+               :closeModal="this.genericModal.closeModal"
+               :componentName="this.genericModal.componentName"
+               :data="this.genericModal.data"
+               :width="this.genericModal.width"
+             />
+           </div>
+         </div>
         </TabPanel>
 
-        <div class="row mt-2">
-          <div class="col-md-2">
-            <button
+        <div class="d-flex d-flex-row mt-2">
+             <button
                 id="btn_save_schedule"
-                class="btn btn-success btn-sm"
-                style="width: 250px"
+                class="btn btn-success"
                 @click="saveData"
             >
               <i class="fas fa-check"></i> Salvar
             </button>
-          </div>
         </div>
       </TabView>
   </div>
@@ -157,29 +142,34 @@
 <script>
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
-import ModalScheduleComponents from "@/components/ScheduleComponents/ModalScheduleComponents";
-import ModalHelpPatientComponent from "@/components/PatientComponents/ModalHelpPatientComponent";
-import ModalHelpEmployeeComponent from "@/components/EmployeeComponents/ModalHelpEmployeeComponent";
+import ModalScheduleComponents from "@/components/ScheduleComponents/ModalScheduleComponents"
+import GenericModal from "@/components/GenericModal";
 import {validCpf} from "@/helpers/Helpers";
 export default {
  components:{
-   ModalHelpEmployeeComponent,
-   ModalHelpPatientComponent,
-   ModalScheduleComponents,
+   GenericModal,
    TabView,
    TabPanel,
+   ModalScheduleComponents
  },
   data(){
    return{
+     genericModal:{
+       headerName: '',
+       componentName: '',
+       displayModal: '',
+       closeModal: null,
+       width: '',
+       data: null,
+
+     },
      openModalSchedule: false,
-     openModalHelpPatient: false,
-     displayModalHelpPatient: false,
-     openModalHelpHealthProfessional: false,
-     displayModalHelpHealthProfessional: false,
      displayModal: true,
+     
      schedule: {
        cpfPatient: '',
        dateSchedule: [],
+       typePayment: '',
        healthProfessional:{
         cpfHealthProfessional: '',
         specialtie: '',
@@ -313,6 +303,9 @@ export default {
      }
      return null;
     },
+    typePaymentMedicalAppointment(){
+      return this.isSchedule;
+    },
     isSchedule(){
      return this.patient.cpf !== ""
          && this.patient.cpf !== undefined
@@ -322,12 +315,6 @@ export default {
          && this.schedule.healthProfessional.medicalProcedures !== "" && this.schedule.healthProfessional.medicalProcedures !== undefined;
 
     },
-    openModalHPatient(){
-     return this.displayModalHelpPatient === true && this.openModalHelpPatient === true;
-    },
-    openModalHHealthProfessinonal(){
-      return this.displayModalHelpHealthProfessional === true && this.openModalHelpHealthProfessional === true;
-    }
   },
   methods:{
     searchPatient(){
@@ -371,21 +358,38 @@ export default {
     saveData(){
       console.log(this.schedule);
     },
-    openHelpPatientMenu(){
-      this.displayModalHelpPatient = true;
-      this.openModalHelpPatient = true;
+    openGenericModal(nameModal){
+      switch(nameModal){
+        case 'ShortPatientComponent':
+          this.genericModal.headerName = "Pesquisar Paciente";
+          this.genericModal.componentName = "ShortPatientComponent";
+          this.genericModal.displayModal = true;
+          this.genericModal.closeModal = this.closeModalGeneric;
+          this.genericModal.data = null;
+          this.genericModal.width = "125vw";
+          this.genericModal.heigth = "125vw";
+         
+        break;
+        case 'ShortEmployeeComponent':
+          this.genericModal.headerName = "Pesquisar Funcionario";
+          this.genericModal.componentName = "ShortEmployeeComponent";
+          this.genericModal.displayModal = true;
+          this.genericModal.closeModal = this.closeModalGeneric;
+          this.genericModal.data = null  
+        break;
+        case 'ShortTypePaymentComponent':
+          this.genericModal.headerName = "Dados Pagamento";
+          this.genericModal.componentName = "ShortTypePaymentComponent";
+          this.genericModal.displayModal = true;
+          this.genericModal.closeModal = this.closeModalGeneric;
+          this.genericModal.data = null;
+          this.genericModal.width = "1250px";
+          
+        break;    
+      }
     },
-    closeModalHelpPatient(){
-      this.displayModalHelpPatient = false;
-      this.openModalHelpPatient = false
-    },
-    openHelpHealthProfessional(){
-      this.displayModalHelpHealthProfessional = true;
-      this.openModalHelpHealthProfessional = true;
-    },
-    closeModalHelpHealthProfessional(){
-      this.displayModalHelpHealthProfessional = false;
-      this.openModalHelpHealthProfessional = false;
+    closeModalGeneric(){
+      this.genericModal.displayModal = false;
     },
     validateCpfPatient(event){
       if(!validCpf(event.keyCode) && validCpf(event.keyCode) !== undefined){

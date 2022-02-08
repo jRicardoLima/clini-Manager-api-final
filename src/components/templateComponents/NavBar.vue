@@ -88,7 +88,10 @@ export default {
           icon: "pi pi-money-bill",
           items:[
             {
-              label: "Fluxo Caixa"
+              label: "Fluxo Caixa",
+              command:() => {
+                this.$router.push({name:'flowPayment'}).catch(() => {});
+              }
             },
             {
               label: "Cont Pagar/Receber"

@@ -51,3 +51,29 @@ export function validCpf(value){
         }
     }
 }
+
+export function formatCurrencyToBRL(value){
+    if(value !== "" && value !== undefined){
+        return value.toLocaleString('pt-BR',{style: 'currency',currency:'BRL'});
+    }
+    return '';
+}
+
+export function validDate(value){
+    if(value !== "" && value !== undefined){
+        let date = value.split("/");
+
+        if(date[0] > 31 || date[0] < 1){
+            return false;
+        }
+        if(date[1] > 12 || date[1] < 1){
+            return false;
+        }
+        if(date[2] < 1000){
+            return false;
+        }
+        return true;
+    }
+    return false
+    
+}

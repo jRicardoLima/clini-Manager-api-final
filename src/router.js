@@ -11,6 +11,7 @@ import PatientView from "@/views/PatientView";
 import HelloWorld from "@/components/HelloWorld";
 import ScheduleView from "@/views/ScheduleView";
 import QueueView from "@/views/QueueView";
+import FlowPaymentView from "@/views/FlowPayView";
 Vue.use(Router);
 
 const router = new Router({
@@ -94,6 +95,14 @@ const router = new Router({
                     name:'queue',
                     children:[
                         {path:":id/prontuario",component:QueueView,name:"medicalRecord"}
+                    ]
+                },
+                {
+                    path:"Fluxo-caixa",
+                    component: FlowPaymentView,
+                    name: 'flowPayment',
+                    children:[
+
                     ]
                 },
                 {
