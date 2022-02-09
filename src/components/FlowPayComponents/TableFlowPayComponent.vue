@@ -65,6 +65,7 @@ import Column from "primevue/column";
 import InputText from "primevue/inputtext";
 import {FilterMatchMode} from "primevue/api";
 import {formatCurrencyToBRL} from "@/helpers/Helpers";
+
 export default{
     components:{
         DataTable,

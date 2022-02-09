@@ -18,7 +18,7 @@ import Tooltip from "primevue/tooltip";
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
-import 'primevue/resources/themes/bootstrap4-light-blue/theme.css';
+import 'primevue/resources/themes/nova-accent/theme.css';
 import '@/custom.css';
 import 'quill/dist/quill';
 import 'quill/dist/quill.snow.css';
