@@ -1,246 +1,181 @@
 <template>
-  <div class="card mt-3">
-      <TabView  :scrollable="true">
-        <TabPanel header="Geral">
-          <div class="row">
-            <div class="col-md-3">
-             <div class="form-floating">
-               <template v-if="foundPatient !== true">
-                 <input
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <Panel header="Paciente" class="customPanel">
+          <ScrollPanel style="height: 450px" class="customScroll">
+            <div class="d-flex d-flex-row mt-2">
+              <div class="form-floating">
+                <input
                   id="cpf_patient"
                   type="text"
                   class="form-control"
-                  placeholder="CPF Paciente"
-                  v-model="patient.cpf"
-                  @focusout="searchPatient"
-                  @keyup="validateCpfPatient"
-                  @keyup.enter="searchPatient"
-                  @keydown.alt.enter="openGenericModal('ShortPatientComponent')"
-                  v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PACIENTE'"
-                 />
-                 <label for="cpf_patient">CPF Paciente</label>
-               </template>
-               <template v-if="foundPatient !== false">
-                 <input
-                  id="name_patient"
+                  placeholder="CPF PACIENTE"
+                  v-model.lazy="schedule.cpfPatient"
+                  @focusout="validateCpf('cpf_patient')"
+                />
+                <label for="cpf_patient">CPF PACIENTE</label>
+              </div>
+            </div>
+            <div class="d-flex d-flex-row mt-2">
+              <div class="form-floating">
+                <input
+                  id="cpf_health_professional"
                   type="text"
                   class="form-control"
-                  placeholder="Nome Paciente"
-                  v-model="patient.name"
-                 />
-                 <label for="name_patient">Nome Paciente</label>
-               </template>
-             </div>
+                  placeholder="CPF PROFISSIONAL SAÚDE"
+                  v-model.lazy="schedule.cpfHealthProfessional"
+                  @focusout="loadHealtProcedureAndSpecialtie"
+                 
+                  
+                />
+                <label class="cpf_health_professional">CPF PROFISSIONAL SAÚDE</label>
+              </div>
+            </div>
+            <div class="d-flex d-flex-row mt-2">
+              <select 
+                class="form-select" 
+                v-model="schedule.specialtie" 
+                style="padding-top: 15px; padding-bottom: 15px"
+                @click="validateCpf"
+                :disabled="testLoadProcedureAndSpecialtie === false"
+                >
+                <option value="">SELECIONE A ESPECIALIDADE</option>
+                <template v-if="testLoadProcedureAndSpecialtie === true">
+                  <template v-for="healthProfe in healthProfessionalData">
+
+                    <option 
+                      v-for="specialtie in healthProfe.specialties" 
+                      :key="specialtie.id"
+                      >
+                      {{specialtie.name}}
+                  </option>
+
+                  </template>
+                </template>
+              </select>
             </div>
 
-            <div class="col-md-3">
-              <div class="form-floating">
-                <template v-if="foundHealthProfessional !== true">
-                  <input
-                    id="cpf_health_professional"
-                    type="text"
-                    class="form-control"
-                    placeholder="CPF Profissional Saúde"
-                    v-model="healthProfessional.cpf"
-                    @focusout="searchHealthProfessional"
-                    @keyup="validateCpfHealthProfessional"
-                    @keyup.enter="searchHealthProfessional"
-                    @keydown.alt.enter="openGenericModal('ShortEmployeeComponent')"
-                    v-tooltip="'PRESSIONE ALT ENTER PARA PESQUISAR PROFISSIONAL SAÚDE'"
-                  />
-                  <label for="cpf_health_professional">CPF Professional Saúde</label>
+            <div class="d-flex d-flex-row mt-2">
+              <select 
+                class="form-select" 
+                v-model="schedule.healthProcedure" 
+                style="padding-top: 15px; padding-bottom: 15px"
+                @click="validateCpf"
+                :disabled="testLoadProcedureAndSpecialtie === false"
+                >
+                <option value="">SELECIONE O PROCEDIMENTO</option>
+                <template v-if="testLoadProcedureAndSpecialtie == true">
+                  <template v-for="healthProfe in healthProfessionalData" >
+
+                   <template v-for="specialtieData in healthProfe.specialties">
+
+                      <option 
+                        v-for="procedure in specialtieData.medicalProcedures" 
+                        :key="procedure.id"
+                      >
+                       {{procedure.name}}
+                     </option>
+
+                   </template>
+
+                  </template>  
                 </template>
-                <template v-if="foundHealthProfessional !== false">
-                  <input
-                    id="name_health_professional"
-                    type="text"
-                    class="form-control"
-                    placeholder="Nome Profissional Saúde"
-                    v-model="healthProfessional.name"
-                  />
-                  <label for="name_health_professional">Nome Professional Saúde</label>
-                </template>
+              </select>
+            </div>
+            <div class="d-flex d-flex-row mt-2" v-if="testLoadCalendar === true">
+              <vc-date-picker
+                v-model="dayTimeSelected"
+                mode="datetime"
+                :valid-hours="[1,2,15]"
+                :disabled-dates="{months:[2],days:[13,15,20]}"
+                is24hr
+                is-dark
+              />
+            </div>
+            <div class="d-flex d-flex-row mt-2" v-if="testLoadCalendar === true">
+              <select class="form-select" style="padding-top: 15px; padding-bottom: 15px">
+                <option>SELECIONE A SALA</option>
+              </select>
+            </div>
+            <p>{{schedule.scheduling}}</p>
+            <div class="row mt-2" v-if="genericModalData.displayModal === true">
+              <div class="col-md-12">
+                <GenericModal
+                 :headerName="genericModalData.headerName"
+                 :displayModal="genericModalData.displayModal"
+                 :closeModal="genericModalData.closeModal"
+                 :componentName="genericModalData.componentName"
+                 :data="genericModalData.data"
+                 :width="genericModalData.width"
+                 :position="genericModalData.position"
+                />
               </div>
             </div>
 
-            <div class="col-md-3">
-              <select class="form-select" v-model="schedule.healthProfessional.specialtie" style="padding-top: 15px; padding-bottom: 15px">
-                <option value="">SELECIONE A ESPECIALIDADE</option>
-                <template v-if="specialtiesHealth !== null">
-                  <option v-for="(specialtie,index) in specialtiesHealth" :key="index">
-                    {{specialtie.name}}
-                  </option>
-                </template>
-              </select>
+            <div class="d-flex d-flex-row mt-2">
+              <button 
+                v-if="renderButtonTypePayment === true"
+                class="btn btn-info"
+                style="width: 80px"
+                @click="openModalGeneric('ShortTypePaymentComponent')"
+              >
+                 <i class="fas fa-money-bill-alt"></i>
+              </button>
             </div>
 
-            <div class="col-md-3">
-              <select class="form-select"  v-model="schedule.healthProfessional.medicalProcedures" style="padding-top: 15px; padding-bottom: 15px">
-                <option value="">SELECIONE O PROCEDIMENTO</option>
-                <template v-if="HealthProcedures !== null">
-                  <option v-for="(medicalProcedure,index) in HealthProcedures" :key="index">
-                    {{medicalProcedure.name}}
-                  </option>
-                </template>
-              </select>
-            </div>
-          </div>
-         <div class="row mt-2">
-           <div class="col-md-1">
-             <button class="btn btn-info" style="width: 80px" @click="openSchedule">
-               <i class="fas fa-calendar-alt"></i>
-             </button>
-           </div>
-           <div class="col-md-1" v-if="typePaymentMedicalAppointment === true">
-             <button 
-                class="btn btn-info" 
-                style="width: 80px" 
-                @click="openGenericModal('ShortTypePaymentComponent')"
-             >
-                <i class="fas fa-money-bill-alt"></i>
-             </button>
-           </div>
-         </div>
-         <div class="row">
-           <div class="col-md-12">
-             <template v-if="openModalSchedule === true">
-               <ModalScheduleComponents
-                :displayModal="displayModal"
-                :setSchedule="setSchedule"
-                :closeModalSchedule="closeModalSchedule"
-               />
-             </template>
-           </div>
-         </div>
-          <div class="row" v-if="this.genericModal.displayModal === true">
-           <div class="col-md-12">
-             <GenericModal
-               :headerName="this.genericModal.headerName"
-               :displayModal="this.genericModal.displayModal"
-               :closeModal="this.genericModal.closeModal"
-               :componentName="this.genericModal.componentName"
-               :data="this.genericModal.data"
-               :width="this.genericModal.width"
-             />
-           </div>
-         </div>
-        </TabPanel>
-
-        <div class="d-flex d-flex-row mt-2">
-             <button
-                id="btn_save_schedule"
-                class="btn btn-success"
-                @click="saveData"
-            >
-              <i class="fas fa-check"></i> Salvar
-            </button>
-        </div>
-      </TabView>
+            <div class="d-flex d-flex-row mt-2">
+              <button class="btn btn-success btn-sm">
+                <i class="fas fa-calendar-plus"></i>Adicionar Agenda
+              </button>
+            </div>            
+          </ScrollPanel>
+        </Panel>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import TabView from "primevue/tabview";
-import TabPanel from "primevue/tabpanel";
-import ModalScheduleComponents from "@/components/ScheduleComponents/ModalScheduleComponents"
+import Panel from "primevue/panel";
+import ScrollPanel from "primevue/scrollpanel";
 import GenericModal from "@/components/GenericModal";
-import {validCpf} from "@/helpers/Helpers";
-export default {
- components:{
-   GenericModal,
-   TabView,
-   TabPanel,
-   ModalScheduleComponents
- },
+import {formatDateToBr,validString} from "@/helpers/Helpers";
+
+export default{
+  components:{
+    Panel,
+    ScrollPanel,
+    GenericModal
+  },
+  created(){
+    this.configScheduledHealthProfessional = {
+      /**ID E NOME DO PROFISSIONAL DE SAÚDE */
+      info:[
+        {
+          month: 'february',
+          number: 2,
+          disabledDates:[10,15,25],
+          availableHours: [15,8,9,10,14]
+        },
+        {
+          month: 'march',
+          number: 3,
+          disabledDates:[],
+          availableHours:[]
+        }
+      ]
+    }
+  },
   data(){
-   return{
-     genericModal:{
-       headerName: '',
-       componentName: '',
-       displayModal: '',
-       closeModal: null,
-       width: '',
-       data: null,
-
-     },
-     openModalSchedule: false,
-     displayModal: true,
-     
-     schedule: {
-       cpfPatient: '',
-       dateSchedule: [],
-       typePayment: '',
-       healthProfessional:{
-        cpfHealthProfessional: '',
-        specialtie: '',
-        medicalProcedures: ''
-       }
-     },
-     specialties: [],
-     healthProcedures: [],
-     patients:[
-       {
-         id: '3',
-         name: 'JOÃO RICARDO LIMA',
-         cpf: '03389454152',
-         rg: '25352523',
-         birthDate: '19/11/1992',
-         information: 'OBS',
-         address: {
-           city: 'PRIMAVERA DO LESTE',
-           zipecode: '',
-           street: 'FLOR DE LIZ',
-           neighborhood: 'PIONEIRO',
-           federate_unit: 'MT',
-           telphone_one: '65 996239237',
-           has_main_telphone_one: true,
-           telphone_two: '65 999291300',
-           has_main_telphone_two: false,
-           email: 'j.ricard_lima@outlook.com',
-         },
-         health_info: {
-           comorbidities: [
-             {name: 'TESTE 1'},
-             {name: 'TESTE 2'},
-             {name: 'TESTE 3'}
-           ],
-         },
-         useDrugs: {
-           drugs: [
-             {name: 'DROGA 1'},
-             {name: 'DROGA 2'},
-             {name: 'DROGA 3'},
-             {name: 'DROGA 4'},
-             {name: 'DROGA 5'}
-           ],
-         }
-       },
-     ],
-     healthProfessionals: [
-       {
-         id: 2,
-         name: 'FUNCIONARIO TESTE blablabal',
-         cpf: '03389454152',
-         professional_register: 'asdasdasdasd',
-         health_professional: true,
-         occupation: {
-           id: 3,
-           name: 'Função 3',
-         },
-         salary: 3000.00,
-         email: "jrolsd@xtx.com.br",
-         address:{
-           id: 2,
-           city: 'cidade Teste',
-           street: "asdasdsdsfasefwefwdasd",
-           neighborhood:"asdasdefreer",
-           zipcode: "325252514",
-           federate_unit: "MT",
-           telphone_one: "",
-           telphone_two:"887788-78787"
-
-         },
-         specialties:[
+    return {
+      dayTimeSelected: null,
+      configScheduledHealthProfessional: null,
+      healthProfessionalData:[
+        {
+          id: 4,
+          name: "PROFISSIONAL ABC",
+          specialties:[
            {
              id: 2,
              name: 'Especialidade 6',
@@ -270,147 +205,142 @@ export default {
              ]
            }
          ]
-       },
-     ],
-     patient:{
-       cpf: '',
-       name: ''
-     },
-     healthProfessional:{
-       cpf: '',
-       name: '',
-     }
+        }
+      ],
+      genericModalData:{
+        headerName: '',
+        componentName: '',
+        displayModal: false,
+        closeModal: '',
+        data: null,
+        width: '',
+        position: '',
+      },
+      validDate:{
+        month: null,
+        days: null,
+        time: null,
+      },
+      
+      schedule: {
+        cpfPatient: '',
+        cpfHealthProfessional: '',
+        specialtie: '',
+        healthProcedure: '',
+        scheduling: null,
+      }
+     
+    }
+  },
+ computed:{
+   testLoadProcedureAndSpecialtie(){
+     if(this.schedule.cpfHealthProfessional !== "" 
+        && this.schedule.cpfHealthProfessional !== undefined){
+        return true;
+      }
+      return false
+   },
+   testLoadCalendar(){
+     if(this.schedule.specialtie !== "" && this.schedule.specialtie !== undefined 
+        && this.schedule.healthProcedure !== "" && this.schedule.healthProcedure !== undefined){
+          return true;
+        }
+        return false;
+   },
+   renderButtonTypePayment(){
+     if(this.schedule.cpfPatient !== "" && this.schedule.cpfPatient !== undefined
+        && this.schedule.cpfHealthProfessional !== "" 
+        && this.schedule.cpfHealthProfessional !== undefined
+        && this.schedule.specialtie !== "" 
+        && this.schedule.specialtie !== undefined
+        && this.schedule.healthProcedure !== ""
+        && this.schedule.healthProcedure !== undefined
+        ){
+          return true;
+        }
+        return false
    }
-  },
-  computed:{
-   foundPatient(){
-     return this.patient.name !== "" && this.patient.name !== undefined;
-   },
-   foundHealthProfessional(){
-     return this.healthProfessional.name !== "" && this.healthProfessional.name !== undefined;
-   },
-    specialtiesHealth(){
-      if(this.specialties !== [] && this.specialties !== undefined
-          && this.healthProfessional.cpf !== "" && this.healthProfessional.cpf !== undefined){
-        return this.specialties;
-      }
-      return null;
-    },
-    HealthProcedures(){
-     if(this.healthProcedures !== [] && this.healthProcedures !== undefined
-         && this.healthProfessional.cpf !== "" && this.healthProfessional.cpf !== undefined){
-       return this.healthProcedures;
-     }
-     return null;
-    },
-    typePaymentMedicalAppointment(){
-      return this.isSchedule;
-    },
-    isSchedule(){
-     return this.patient.cpf !== ""
-         && this.patient.cpf !== undefined
-         && this.healthProfessional.cpf !== ""
-         && this.healthProfessional.cpf !== undefined
-         && this.schedule.healthProfessional.specialtie !== "" && this.schedule.healthProfessional.specialtie !== undefined
-         && this.schedule.healthProfessional.medicalProcedures !== "" && this.schedule.healthProfessional.medicalProcedures !== undefined;
+ },
+ watch:{
+   dayTimeSelected(){
+     let daySelected = formatDateToBr(this.dayTimeSelected);
+     console.log(this.dayTimeSelected.month());
+     console.log(daySelected);
 
-    },
-  },
+   },
+ },
   methods:{
-    searchPatient(){
-      if(this.patient.cpf !== "" && this.patient.cpf !== undefined){
-        this.patients.forEach(element => {
-          if(element.cpf === this.patient.cpf){
-            this.patient.name = element.name;
-          }
-        })
+    loadHealtProcedureAndSpecialtie(){
+      if(this.schedule.cpfHealthProfessional !== "" 
+      && this.schedule.cpfHealthProfessional !== undefined){
+        return this.healthProfessionalData;
       }
     },
-    searchHealthProfessional(){
-      if(this.healthProfessional.cpf !== "" && this.healthProfessional.cpf !== undefined){
-        this.healthProfessionals.forEach(element => {
-            if(element.cpf === this.healthProfessional.cpf){
-              this.healthProfessional.name = element.name;
-              this.specialties = element.specialties;
-               element.specialties.forEach(el => {
-                this.healthProcedures = el.medicalProcedures;
-              });
-            }
-        });
-      }
-    },
-    setSchedule(days){
-      if(days !== [] && days !== undefined){
-        this.schedule.dateSchedule = days;
-      }
-    },
-    closeModalSchedule(){
-      this.displayModal = false;
-      this.openModalSchedule = false;
-    },
-    openSchedule(){
-      if(this.isSchedule === true){
-        this.schedule.cpfPatient = this.patient.cpf;
-        this.schedule.healthProfessional.cpfHealthProfessional = this.healthProfessional.cpf;
-        this.openModalSchedule = true;
-      }
-    },
-    saveData(){
-      console.log(this.schedule);
-    },
-    openGenericModal(nameModal){
+    openModalGeneric(nameModal){
       switch(nameModal){
-        case 'ShortPatientComponent':
-          this.genericModal.headerName = "Pesquisar Paciente";
-          this.genericModal.componentName = "ShortPatientComponent";
-          this.genericModal.displayModal = true;
-          this.genericModal.closeModal = this.closeModalGeneric;
-          this.genericModal.data = null;
-          this.genericModal.width = "125vw";
-          this.genericModal.heigth = "125vw";
-         
-        break;
-        case 'ShortEmployeeComponent':
-          this.genericModal.headerName = "Pesquisar Funcionario";
-          this.genericModal.componentName = "ShortEmployeeComponent";
-          this.genericModal.displayModal = true;
-          this.genericModal.closeModal = this.closeModalGeneric;
-          this.genericModal.data = null  
-        break;
+
         case 'ShortTypePaymentComponent':
-          this.genericModal.headerName = "Dados Pagamento";
-          this.genericModal.componentName = "ShortTypePaymentComponent";
-          this.genericModal.displayModal = true;
-          this.genericModal.closeModal = this.closeModalGeneric;
-          this.genericModal.data = null;
-          this.genericModal.width = "1250px";
-          
-        break;    
+          this.genericModalData.headerName = "Dados Pagamento";
+          this.genericModalData.componentName = "ShortTypePaymentComponent";
+          this.genericModalData.displayModal = true;
+          this.genericModalData.closeModal = this.closeModalGeneric;
+          this.genericModalData.data = null;
+          this.genericModalData.width = "920px";
+          this.genericModalData.position = "topright"
+        break;  
       }
     },
     closeModalGeneric(){
-      this.genericModal.displayModal = false;
+      this.genericModalData.displayModal = false;
     },
-    validateCpfPatient(event){
-      if(!validCpf(event.keyCode) && validCpf(event.keyCode) !== undefined){
-        this.patient.cpf = "";
+    verifyDateSelected(){
+      console.log(this.schedule.scheduling);
+    },
+    validateCpf(nameInput){
+      if(nameInput == 'cpf_patient'){
+         if(!validString(this.schedule.cpfPatient,',','.','-','@','#','$','¬','"','&','*','(',')')){
+        if(!Number.isInteger(parseInt(this.schedule.cpfPatient))){
+          this.cpfPatient = "";
+          this.$toast.add({
+          severity: 'warn',
+          summary: 'INFORMAÇÃO DO SISTEMA',
+          detail: 'CARACTERE NÃO PERMITIDO',
+          life: 1500
+        });
+        }
+       } else {
+         this.schedule.cpfPatient = ""
+          this.$toast.add({
+            severity: 'warn',
+            summary: 'INFORMAÇÃO DO SISTEMA',
+            detail: 'CARACTERE NÃO PERMITIDO',
+            life: 1500
+          });
+        }
+      } else {
+         if(!validString(this.schedule.cpfHealthProfessional,',','.','-','@','#','$','¬','"','&','*','(',')')){
+        if(!Number.isInteger(parseInt(this.schedule.cpfHealthProfessional))){
+          this.schedule.cpfHealthProfessional = "";
+          this.schedule.specialtie = "";
+          this.schedule.healthProcedure = "";
+          this.$toast.add({
+          severity: 'warn',
+          summary: 'INFORMAÇÃO DO SISTEMA',
+          detail: 'CARACTERE NÃO PERMITIDO',
+          life: 1500
+        });
+        }
+      } else {
+        this.schedule.cpfHealthProfessional = "";
+        this.schedule.specialtie = "";
+        this.schedule.healthProcedure = "";
         this.$toast.add({
-          severity:'warn',
-          summary:'INFORMAÇÃO DO SISTEMA',
-          detail:'CARACTERE NÃO PERMITIDO',
-          life:1500
+          severity: 'warn',
+          summary: 'INFORMAÇÃO DO SISTEMA',
+          detail: 'CARACTERE NÃO PERMITIDO',
+          life: 1500
         });
       }
-    },
-    validateCpfHealthProfessional(event){
-      if(!validCpf(event.keyCode) && validCpf(event.keyCode) !== undefined){
-        this.healthProfessional.cpf = "";
-        this.$toast.add({
-          severity:'warn',
-          summary:'INFORMAÇÃO DO SISTEMA',
-          detail:'CARACTERE NÃO PERMITIDO',
-          life:1500
-        });
       }
     }
   }

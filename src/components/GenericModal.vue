@@ -4,6 +4,7 @@
         :style="{width: `${width}`}"
         :modal="true"
         :closable="false"  
+        :position="position"
     >
   
       <template #header>
@@ -57,7 +58,8 @@ export default{
         closeModal: Function,
         componentName: String,
         width: String,
-        data:[Object,Array], 
+        data:[Object,Array],
+        position: String, 
     },
     computed:{
         component(){

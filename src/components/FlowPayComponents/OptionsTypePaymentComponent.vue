@@ -70,7 +70,6 @@
                 :paginator="true"
                 class="p-datatable"
                 editMode="cell"
-                @cell-edit-complete="cellEditation"
                 :selection.sync="selectedTypePayment"
                 showGridlines
                 :rows="3"
@@ -280,9 +279,6 @@ export default{
             }
             this.paymentsInfo.dataParcels = typePaymentDeleted;
         },
-        teste(){
-            console.log(this.paymentsInfo.dataParcels);
-        }
     }
 }    
 </script>

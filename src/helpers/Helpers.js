@@ -77,3 +77,25 @@ export function validDate(value){
     return false
     
 }
+
+export function formatDateToBr(value = "",options = null){
+    if(value !== ""){
+        if(options !== null){
+            return new Intl.DateTimeFormat('pt-BR',options).format(value);           
+        }
+        return new Intl.DateTimeFormat('pt-BR',{
+            year: 'numeric',month:'numeric',day: 'numeric',
+            hour:'numeric',minute: 'numeric',second: 'numeric'})
+            .format(value);
+    }
+}
+
+export function validString(value,...symbols){
+   for(let element of symbols){
+       if(value.indexOf(element) >= 1){
+           return true;
+       }
+   }
+   return false; 
+   
+}

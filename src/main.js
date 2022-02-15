@@ -13,6 +13,7 @@ import Toast from "primevue/toast";
 import Loading from "@/components/Loading";
 import Dialog from "@/components/Dialog";
 import MessageInfo from "@/components/MessageInfo";
+//import VCalendar from "v-calendar";
 import VCalendar from "v-calendar";
 import Tooltip from "primevue/tooltip";
 import 'primevue/resources/primevue.min.css';
@@ -23,6 +24,7 @@ import '@/custom.css';
 import 'quill/dist/quill';
 import 'quill/dist/quill.snow.css';
 
+
 Vue.config.productionTip = false
 
 Vue.use(PrimeVue);
@@ -31,6 +33,9 @@ Vue.use(ToastService);
 Vue.use(VCalendar,{
   componentPrefix:'vc'
 });
+// Vue.use(VCalendar,{
+//   componentPrefix:'vc'
+// })
 
 /**
  * COMPONENTES GLOBAIS

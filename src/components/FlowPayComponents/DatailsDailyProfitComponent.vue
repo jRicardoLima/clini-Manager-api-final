@@ -38,7 +38,10 @@
       </template>
       <template #groupfooter="slotsProps">
           <div class="d-flex d-flex-row">
-              <p><b>Total:</b> {{amountByProfessional(slotsProps.data.health_professional.name)}}</p>
+             <p class="totalGroupStyle">
+                <b>Total:</b> 
+                {{amountByProfessional(slotsProps.data.health_professional.name) | formatValue}}
+             </p>
           </div>
       </template>
        <template #footer>
@@ -152,15 +155,16 @@ export default{
          }
          return sum;
      },
-     onRowGroupCollapse(){
-         console.log("colapse");
-     },
-     onRowGroupExpand(){
-         console.log("Expanded")
-     }
     }
 }
 </script>
 
 <style scoped>
+
+.totalGroupStyle{
+    background-color: #20AB01;
+    color: white;
+
+}
+
 </style>
