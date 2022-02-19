@@ -24,13 +24,13 @@ export default {
   components:{
     FullCalendar,
   },
-  beforeMount(){
-    this.calendarOptions.events = [{ id:5,title: 'João Ricardo', date: '2022-02-01T12:30:00' },
-          { id:6,title: 'João Miguel', date: '2022-02-01T13:30:00' },
-          { id:4,title: 'Jessica Dyana', date: '2022-02-01T14:30:00' },
-          { id:3,title: 'João Pedro', date: '2022-02-01T15:30:00' },]
-    // this.calendarOptions.events = this.eventsCalendar;  
-  },
+  // beforeMount(){
+  //   this.calendarOptions.events = [{ id:5,title: 'João Ricardo', date: '2022-02-01T12:30:00' },
+  //         { id:6,title: 'João Miguel', date: '2022-02-01T13:30:00' },
+  //         { id:4,title: 'Jessica Dyana', date: '2022-02-01T14:30:00' },
+  //         { id:3,title: 'João Pedro', date: '2022-02-01T15:30:00' },]
+  //   // this.calendarOptions.events = this.eventsCalendar;  
+  // },
   data(){
     return {
       calendarOptions:{
@@ -39,7 +39,7 @@ export default {
          locales: [brLocale],
          initialView: 'dayGridMonth',
          eventClick:this.testeClic,
-         events: ''
+         events: []
       },
     }
   },

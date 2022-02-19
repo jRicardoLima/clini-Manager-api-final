@@ -1,9 +1,5 @@
 import Vue from 'vue';
 import App from './App.vue';
-import 'bootstrap/dist/css/bootstrap.css';
-import "@fortawesome/fontawesome-free/js/brands";
-import "@fortawesome/fontawesome-free/js/solid"
-import  "@fortawesome/fontawesome-free/js/fontawesome";
 import router from "@/router";
 import store from "@/store/store";
 import PrimeVue from "primevue/config";
@@ -11,11 +7,14 @@ import ConfirmationService from "primevue/confirmationservice";
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
 import Loading from "@/components/Loading";
-import Dialog from "@/components/Dialog";
+import DialogInfo from "@/components/DialogInfo";
 import MessageInfo from "@/components/MessageInfo";
-//import VCalendar from "v-calendar";
 import VCalendar from "v-calendar";
 import Tooltip from "primevue/tooltip";
+import 'bootstrap/dist/css/bootstrap.css';
+import "@fortawesome/fontawesome-free/js/brands";
+import "@fortawesome/fontawesome-free/js/solid"
+import  "@fortawesome/fontawesome-free/js/fontawesome";
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
@@ -42,10 +41,10 @@ Vue.use(VCalendar,{
  */
 
 Vue.component("Loading",Loading);
-Vue.component("Dialog",Dialog);
+Vue.component("DialogInfo",DialogInfo);
 Vue.component("MessageInfo",MessageInfo);
 Vue.component("Toast",Toast);
-
+//Vue.component("Dialog",Dialog);
 /**
  * FIM COMPONENTES GLOBAIS
  */

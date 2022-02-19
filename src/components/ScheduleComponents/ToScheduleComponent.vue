@@ -13,6 +13,8 @@
                   placeholder="CPF PACIENTE"
                   v-model.lazy="schedule.cpfPatient"
                   @focusout="validateCpf('cpf_patient')"
+                  @keydown.alt.enter="openModalGeneric('ShortPatientComponent')"
+                  v-tooltip="'PRESIONE ALT ENTER PARA PESQUISAR UM PACIENTE'"
                 />
                 <label for="cpf_patient">CPF PACIENTE</label>
               </div>
@@ -26,7 +28,8 @@
                   placeholder="CPF PROFISSIONAL SAÚDE"
                   v-model.lazy="schedule.cpfHealthProfessional"
                   @focusout="loadHealtProcedureAndSpecialtie"
-                 
+                  @keydown.alt.enter="openModalGeneric('ShortEmployeeComponent')"
+                  v-tooltip = "'PRESIONE ALT ENTER PARA PESQUISAR PROFISSIONAL SAÚDE'"
                   
                 />
                 <label class="cpf_health_professional">CPF PROFISSIONAL SAÚDE</label>
@@ -85,10 +88,11 @@
             </div>
             <div class="d-flex d-flex-row mt-2" v-if="testLoadCalendar === true">
               <vc-date-picker
-                v-model="dayTimeSelected"
+                v-model="schedule.scheduling"
                 mode="datetime"
-                :valid-hours="[1,2,15]"
-                :disabled-dates="{months:[2],days:[13,15,20]}"
+                :valid-hours="getInfoScheduleHealthProfessional.availableHours"
+                :available-dates="{months:getInfoScheduleHealthProfessional.number+1,
+                                  days:getInfoScheduleHealthProfessional.availableDates}"
                 is24hr
                 is-dark
               />
@@ -98,7 +102,6 @@
                 <option>SELECIONE A SALA</option>
               </select>
             </div>
-            <p>{{schedule.scheduling}}</p>
             <div class="row mt-2" v-if="genericModalData.displayModal === true">
               <div class="col-md-12">
                 <GenericModal
@@ -125,10 +128,20 @@
             </div>
 
             <div class="d-flex d-flex-row mt-2">
-              <button class="btn btn-success btn-sm">
-                <i class="fas fa-calendar-plus"></i>Adicionar Agenda
+              <button class="btn btn-success btn-sm" @click="addPatientSchedule">
+                <i class="fas fa-calendar-plus"></i>Adicionar Na Agenda
               </button>
             </div>            
+          </ScrollPanel>
+        </Panel>
+      </div>
+
+      <div class="col-md-8">
+        <Panel header="Agenda" class="customPanel">
+          <ScrollPanel style="height: 800px" class="customScroll">
+              <FullSchedule
+                :setData="dataFullSchedule"
+              />
           </ScrollPanel>
         </Panel>
       </div>
@@ -140,36 +153,19 @@
 import Panel from "primevue/panel";
 import ScrollPanel from "primevue/scrollpanel";
 import GenericModal from "@/components/GenericModal";
-import {formatDateToBr,validString} from "@/helpers/Helpers";
+import {validString,formatDateFullCalendar} from "@/helpers/Helpers";
+import FullSchedule from "@/components/FullSchedule";
 
 export default{
   components:{
     Panel,
     ScrollPanel,
-    GenericModal
-  },
-  created(){
-    this.configScheduledHealthProfessional = {
-      /**ID E NOME DO PROFISSIONAL DE SAÚDE */
-      info:[
-        {
-          month: 'february',
-          number: 2,
-          disabledDates:[10,15,25],
-          availableHours: [15,8,9,10,14]
-        },
-        {
-          month: 'march',
-          number: 3,
-          disabledDates:[],
-          availableHours:[]
-        }
-      ]
-    }
+    GenericModal,
+    FullSchedule
   },
   data(){
     return {
-      dayTimeSelected: null,
+      dataFullSchedule: {},
       configScheduledHealthProfessional: null,
       healthProfessionalData:[
         {
@@ -227,7 +223,7 @@ export default{
         cpfHealthProfessional: '',
         specialtie: '',
         healthProcedure: '',
-        scheduling: null,
+        scheduling: new Date(),
       }
      
     }
@@ -259,15 +255,51 @@ export default{
           return true;
         }
         return false
+   },
+   getInfoScheduleHealthProfessional(){
+     if(this.schedule.scheduling !== null && this.schedule.scheduling !== undefined){
+        let month = this.schedule.scheduling.getMonth();
+        if(this.configScheduledHealthProfessional !== null 
+          && this.configScheduledHealthProfessional !== undefined){
+           return this.configScheduledHealthProfessional.info
+                  .find(element => element.number == month);
+          }
+          return null;
+     }
+     return null
    }
  },
  watch:{
-   dayTimeSelected(){
-     let daySelected = formatDateToBr(this.dayTimeSelected);
-     console.log(this.dayTimeSelected.month());
-     console.log(daySelected);
-
-   },
+   schedule:{
+     deep: true,
+     handler(value){
+       if(value.cpfHealthProfessional !== "" && value.cpfHealthProfessional !== undefined){
+         this.configScheduledHealthProfessional = {
+           /**DADOS DO PROFISSIONAL DE SAÚDE */
+          info:[
+           {
+            month: 'february',
+            number: 1,
+            availableDates:[5,10,15,25],
+            availableHours: [15,8,9,10,14]
+           },
+           {
+            month: 'march',
+            number: 2,
+            availableDates:[5,15,20],
+            availableHours:[8,13,15]
+           },
+           {
+             month: 'april',
+             number: 3,
+             availableDates: [],
+             availableHours:[] 
+           }
+          ]
+         }
+       }
+     }
+   }
  },
   methods:{
     loadHealtProcedureAndSpecialtie(){
@@ -288,13 +320,51 @@ export default{
           this.genericModalData.width = "920px";
           this.genericModalData.position = "topright"
         break;  
+
+        case 'ShortPatientComponent':
+          this.genericModalData.headerName = "Pesquisar Paciente";
+          this.genericModalData.componentName = "ShortPatientComponent";
+          this.genericModalData.displayModal = true;
+          this.genericModalData.closeModal = this.closeModalGeneric;
+          this.genericModalData.data = null;
+          this.genericModalData.width = "920px";
+          this.genericModalData.position = "topright"
+        break;  
+
+        case 'ShortEmployeeComponent':
+          this.genericModalData.headerName = "Pesquisar Funcionário";
+          this.genericModalData.componentName = "ShortEmployeeComponent";
+          this.genericModalData.displayModal = true;
+          this.genericModalData.closeModal = this.closeModalGeneric;
+          this.genericModalData.data = null;
+          this.genericModalData.width = "920px";
+          this.genericModalData.position = "topright";
+
       }
     },
     closeModalGeneric(){
       this.genericModalData.displayModal = false;
     },
-    verifyDateSelected(){
-      console.log(this.schedule.scheduling);
+    addPatientSchedule(){
+      for(let element of this.configScheduledHealthProfessional.info){
+          if((element.number+1) == (this.schedule.scheduling.getMonth()+1)){
+               let validDate = element.availableDates
+                           .find(item => item == this.schedule.scheduling.getDate());
+              
+              if(validDate == undefined || validDate == null){
+                this.$toast.add({
+                                 severity: 'warn',
+                                 summary: 'INFORMAÇÃO DO SISTEMA',
+                                 detail: 'DATA SELECIONA NÃO DISPONIVEL',
+                                 life: 2500
+                                });
+                return;
+              } 
+       
+          }
+      }
+      this.dataFullSchedule =  { id:5,title: 'João Ricardo', 
+                               date: formatDateFullCalendar(this.schedule.scheduling)};
     },
     validateCpf(nameInput){
       if(nameInput == 'cpf_patient'){

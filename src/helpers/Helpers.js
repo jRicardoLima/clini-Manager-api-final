@@ -99,3 +99,14 @@ export function validString(value,...symbols){
    return false; 
    
 }
+
+export function formatDateFullCalendar(value){
+    let month = parseInt(value.getMonth()) + 1;
+    let dateFormated = value.getFullYear()+"-";
+    dateFormated += month < 10 ? '0'+month+"-" : month+"-";
+    dateFormated += parseInt(value.getDate()) < 10 ? '0'+value.getDate()+"T": value.getDate()+"T";
+    dateFormated += parseInt(value.getHours()) < 10 ? '0'+value.getHours()+":" : value.getHours()+":";
+    dateFormated += parseInt(value.getMinutes()) < 10 ? '0'+value.getMinutes()+":" : value.getMinutes()+":"
+    dateFormated += parseInt(value.getSeconds()) < 10 ? '0'+value.getSeconds() : value.getSeconds();
+    return dateFormated;
+}
