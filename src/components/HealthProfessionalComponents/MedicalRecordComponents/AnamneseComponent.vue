@@ -41,6 +41,7 @@
                 <DynamicLink 
                    :param="anamnese.files" 
                    :mostrar="showAnamneseFiles"
+                   :multiple="true"
                 />
              </div>
         </AccordionTab>

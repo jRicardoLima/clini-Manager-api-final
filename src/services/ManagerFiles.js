@@ -1,7 +1,7 @@
 class ManagerFiles{
 
     constructor(multiple = false){
-        this.fileBase64 = "";
+        this.fileBase64 = [];
         this.filesBase64 = [];
         this.multiple = multiple;
         this.mimes = [];
@@ -11,7 +11,7 @@ class ManagerFiles{
         const instance = this;
         if(this.multiple){
             for(let file of eventFile){
-                
+              
                 let reader = new FileReader();
 
                 reader.onload = (e) => {
@@ -23,15 +23,14 @@ class ManagerFiles{
             }
         } else {
             //let file = eventFile.target.files || eventFile.dataTransfer.files;
-            let file = eventFile.files[0];
-            let reader = new FileReader();
-
-            reader.onload = (e) => {
-                instance.fileBase64 = e.target.result;
-            }
-            reader.readAsDataURL(file);     
-        }
-        
+           // let file = eventFile;
+           console.log(eventFile)
+        //     let reader = new FileReader();
+        //    reader.onload = (e) => {
+        //        instance.fileBase64.push(e.target.result);
+        //     }
+        //     reader.readAsDataURL(file);     
+        }   
         
     }
 
@@ -43,7 +42,6 @@ class ManagerFiles{
                let b64 = file.slice(file.indexOf(",")+1);
                let mime = file.slice(file.indexOf("/")+1,file.indexOf(";"));
                count += 1;
-
                files.push({
                    href: `data:application/octet-stream;base64,${b64}`,
                    label: `Arquivo_${count}.${mime}`,
@@ -54,16 +52,20 @@ class ManagerFiles{
            }
            return files;
         } else {
-            let b64 = this.fileBase64.slice(this.fileBase64.indexOf(",")+1);
-            let mime = this.fileBase64.slice(this.fileBase64.indexOf("/")+1,
-                                             this.fileBase64.indexOf(";"));
-            this.mimes.push({typeMime: mime});                                 
-            return {
-                href: `data:application/octet-stream;base64,${b64}`,
-                label: `Arquivo_1.${mime}`,
-                nameFile: `Arquivo_1.${mime}`,
-                typeMime: mime,
-            };
+            let files = [];
+            for(let file in this.fileBase64){
+                let b64 = file.slice(file.indexOf(",")+1);
+                let mime = file.slice(file.indexOf("/")+1,
+                                                 file.indexOf(";")); 
+                this.mimes.push({typeMime: mime});
+                
+                files.push({
+                    href: `data:application/octet-stream;base64,${b64}`,
+                     label: `Arquivo_1.${mime}`,
+                     nameFile: `Arquivo_1.${mime}`,
+                     typeMime: mime,
+              });
+            }           
         }
     }
 }

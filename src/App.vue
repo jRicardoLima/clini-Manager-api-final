@@ -2,6 +2,7 @@
   <div id="app">
    <Loading/>
    <Toast/>
+   <DialogInfo/>
    <router-view></router-view>
   </div>
 </template>

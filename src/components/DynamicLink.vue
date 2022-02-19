@@ -1,6 +1,7 @@
 <template>
     
-    <div v-if="mostrar === true">
+    <div>
+        <div v-if="mostrar === true && multiple === true">
         <div class="row mt-2" v-for="(data,index) in param" :key="index">
           <div class="col-md">
                <a class="link-success link-style" :href="data.href" :download="data.nameFile">
@@ -14,15 +15,28 @@
            </a>
           </div>
         </div>
+
+        <div v-if="mostrar === true && multiple === false">
+        <div class="row mt-2">
+            <div class="col-md">
+                <a class="link-sucess link-style" :href="param.href" :download="param.nameFile">
+                    <b>{{param.label}}</b>
+                </a>
+            </div>
+        </div>
+    
     </div> 
+    </div>
+    </div>
 </template>
 
 <script>
  
  export default{
      props:{
-         param: Array,
-         mostrar: Boolean
+         param: [Array,Object],
+         mostrar: Boolean,
+         multiple: Boolean
      },
      data(){
          return{

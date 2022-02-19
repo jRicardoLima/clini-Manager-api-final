@@ -1,10 +1,5 @@
 <template>
-  <Dialog
-    header="PESQUISA PACIENTES"
-    :visible.sync="displayModal"
-    :modal="true"
-    :closable="false"
-  >
+  <div>
     <div class="row">
       <div class="col-md-4">
        <div class="form-floating">
@@ -54,35 +49,23 @@
           <i class="fas fa-search"></i> Pesquisar
         </button>
       </div>
-
-      <div class="col-md-2">
-        <button
-          id="close_modal_patient"
-          class="btn btn-warning btn-sm "
-          style="width: 115px"
-          @click="closeModalHelpPatient"
-        >Fechar</button>
-      </div>
     </div>
 
     <div v-if="isResult === true" class="row mt-2">
       <TableDataPatientComponent :resultSearch="resultSearch"/>
     </div>
-  </Dialog>
+  </div>
 </template>
 
 <script>
-import Dialog from "primevue/dialog";
 import TableDataPatientComponent from "@/components/PatientComponents/TableDataPatientComponent";
 
 export default {
   components:{
     TableDataPatientComponent,
-    Dialog,
   },
   props:{
-    displayModal: Boolean,
-    closeModal: Function
+    data:[Object,Array]
   },
   computed:{
     isResult(){
@@ -212,9 +195,6 @@ export default {
         ]
       },3000);
     },
-    closeModalHelpPatient() {
-      this.closeModal();
-    }
   }
 }
 </script>
