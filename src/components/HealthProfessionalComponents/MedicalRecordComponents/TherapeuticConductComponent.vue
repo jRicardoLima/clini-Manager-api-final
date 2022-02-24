@@ -41,7 +41,9 @@
             <div class="d-flex d-flex-row">
                <DynamicLink 
                :param="therapeuticConduct.files" 
-               :mostrar="showTConductFiles"/>
+               :mostrar="showTConductFiles"
+               :multiple="true"
+               />
             </div>
         </AccordionTab>
     </Accordion>
@@ -57,6 +59,7 @@ import ManagerFiles from "@/services/ManagerFiles.js";
 import Editor from "primevue/editor";
 
 export default{
+    name:"TherapeuticConductComponent",
     components:{
         Accordion,
         AccordionTab,
@@ -64,6 +67,10 @@ export default{
         FileUpload,
         DynamicLink,
         Editor
+    },
+    props:{
+        setInfoMedicalRecord: Function,
+        executeMedicalRecord: Boolean,
     },
     managerFiles: null,
     beforeMount(){
@@ -78,6 +85,15 @@ export default{
                 text: ''
             }
         }
+    },
+    watch:{
+       executeMedicalRecord(){
+           if(this.executeMedicalRecord == true){
+               this.therapeuticConduct.files = this.managerFiles.convertBaseToDownload();
+
+               this.setInfoMedicalRecord({name:this.$options.name,data: this.therapeuticConduct});
+           }
+       } 
     },
     methods:{
         showFiles(){

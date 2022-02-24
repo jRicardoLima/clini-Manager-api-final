@@ -1,24 +1,12 @@
 # clini_manager
 
-## Project setup
+## Resumo do Projeto
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+Projeto para a gestão de clinicas e consultórios médicos
 ```
 
-### Compiles and minifies for production
+### Objetivo
 ```
-npm run build
+Facilitar o gerenciamento de consultórios e clinicas médicas. Automatizando todas as rotinas
+de uma unidade de saúde.
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
