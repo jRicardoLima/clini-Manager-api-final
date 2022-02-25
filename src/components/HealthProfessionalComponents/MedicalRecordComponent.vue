@@ -47,24 +47,42 @@
                     </div>
                     
                     <div class="mt-2">
-                       <DiagnosticHypothesisComponent/>
+                       <DiagnosticHypothesisComponent
+                         :executeMedicalRecord="executeMedicalRecord"
+                         :setInfoMedicalRecord="setInfoMedical"
+                       />
                     </div>
 
                     <div class="mt-2">
-                       <DefinitiveDiagnosticComponent/>
+                       <DefinitiveDiagnosticComponent
+                         :executeMedicalRecord="executeMedicalRecord"
+                         :setInfoMedicalRecord="setInfoMedical"
+                       />
                     </div>
                     
                     <div class="mt-2">
-                       <TherapeuticConductComponent/>
+                       <TherapeuticConductComponent
+                         :executeMedicalRecord="executeMedicalRecord"
+                         :setInfoMedicalRecord="setInfoMedical"
+                       />
                     </div>
                        <div class="mt-2">
-                           <DoctorPrescritionComponent/>
+                           <DoctorPrescritionComponent
+                             :executeMedicalRecord="executeMedicalRecord"
+                             :setInfoMedicalRecord="setInfoMedical"
+                           />
                        </div>
                        <div class="mt-2">
-                           <RequestExamesComponent/>
+                           <RequestExamesComponent
+                            :executeMedicalRecord="executeMedicalRecord"
+                            :setInfoMedicalRecord="setInfoMedical"
+                           />
                        </div>
                        <div class="mt-2">
-                           <MedicalReleaseComponent/>
+                           <MedicalReleaseComponent
+                              :executeMedicalRecord="executeMedicalRecord"
+                              :setInfoMedicalRecord="setInfoMedical"
+                           />
                        </div>
                  
                    

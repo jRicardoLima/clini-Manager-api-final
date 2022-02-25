@@ -37,7 +37,11 @@
             </button>
          </div>
          <div class="d-flex d-flex-row">
-            <DynamicLink :param="definitiveDiagnostic.files" :mostrar="showDefinitiveDFiles"/>
+            <DynamicLink 
+              :param="definitiveDiagnostic.files" 
+              :mostrar="showDefinitiveDFiles"
+              :multiple="true"
+              />
          </div>
         </AccordionTab>
     </Accordion>
@@ -53,6 +57,7 @@ import ManagerFiles from "@/services/ManagerFiles.js";
 import Editor from "primevue/editor";
 
 export default{
+    name:'DefinitiveDiagnosticComponent',
     components:{
         Accordion,
         AccordionTab,
@@ -65,6 +70,10 @@ export default{
     beforeMount(){
         this.managerFiles = new ManagerFiles(true);
     },
+    props:{
+      setInfoMedicalRecord: Function,
+      executeMedicalRecord: Boolean
+    },
     data(){
         return {
             showButtonDefinitveD: false,
@@ -72,6 +81,15 @@ export default{
             definitiveDiagnostic:{
                 files: null,
                 text: ''
+            }
+        }
+    },
+    watch:{
+        executeMedicalRecord(){
+            if(this.executeMedicalRecord == true){
+                this.definitiveDiagnostic.files = this.managerFiles.convertBaseToDownload();
+
+                this.setInfoMedicalRecord({name:this.$options.name,data:this.definitiveDiagnostic});
             }
         }
     },

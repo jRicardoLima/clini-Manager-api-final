@@ -70,6 +70,12 @@ class UserService{
                     this.vm.$router.push({name:"occupation"}).catch(() => {});
                   }
                 },
+                {
+                  label: "Salas",
+                  command: () => {
+                    this.vm.$router.push({name:"room"}).catch(() => {});
+                  }
+                }
               ]
             },
             {

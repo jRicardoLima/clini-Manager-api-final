@@ -11,7 +11,7 @@
     transition: background-color .3s !important;
  }
  
- .p-panel-header{
+ .p-panel .p-panel-header{
      background-color: #88acb9 !important;
  }
 
@@ -21,4 +21,8 @@
 }
 .p-menuitem{
   font-weight: bold !important;
+}
+
+.p-editor-container .p-editor-toolbar{
+  background-color: #DADADA !important;
 }

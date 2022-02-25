@@ -57,6 +57,7 @@ import ManagerFiles from "@/services/ManagerFiles.js";
 import Editor from "primevue/editor";
 
 export default{
+    name: 'AnamneseComponent',
     components:{
         Accordion,
         AccordionTab,
@@ -87,7 +88,7 @@ export default{
       executeMedicalRecord(){
         if(this.executeMedicalRecord == true){
             this.anamnese.files = this.managerFiles.convertBaseToDownload();
-            this.setInfoMedicalRecord(this.anamnese);
+            this.setInfoMedicalRecord({name:this.$options.name,date:this.anamnese});
         }
       }
     },
@@ -121,6 +122,6 @@ export default{
 }
 </script>
 
-<style scope>
-
+<style scoped>
+ 
 </style>

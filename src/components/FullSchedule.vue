@@ -50,8 +50,21 @@ export default{
  },
  watch:{
     setData(){
-        this.optionsData.events.push(this.setData);
-        //this.optionsData.events.push({id: 5, title:"João Ricardo",date:'2022-01-05T15:30:00'});
+           this.optionsData.events.push(this.setData);
+
+           this.optionsData.events.sort((elementOne,elementTwo) => {
+               let dateOne = new Date(elementOne.date);
+               let dateTwo = new Date(elementTwo.date);
+               
+               if(dateOne > dateTwo){
+                   return 1;
+               }
+               if(dateOne < dateTwo){
+                   return -1;
+               }
+               return 0;
+           });
+        
     },
  },
  methods:{

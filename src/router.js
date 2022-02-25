@@ -12,6 +12,7 @@ import HelloWorld from "@/components/HelloWorld";
 import ScheduleView from "@/views/ScheduleView";
 import QueueView from "@/views/QueueView";
 import FlowPaymentView from "@/views/FlowPayView";
+import RoomView from "@/views/RoomView";
 Vue.use(Router);
 
 const router = new Router({
@@ -101,6 +102,14 @@ const router = new Router({
                     path:"Fluxo-caixa",
                     component: FlowPaymentView,
                     name: 'flowPayment',
+                    children:[
+
+                    ]
+                },
+                {
+                    path:"Salas",
+                    component: RoomView,
+                    name: 'room',
                     children:[
 
                     ]

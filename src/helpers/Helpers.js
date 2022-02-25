@@ -22,6 +22,26 @@ export function validCnpj(value){
     }
 }
 
+export function validCpf(value){
+    if(value !== 8 && value !== 9 && value !== 189 && value !== 190){
+        if(value < 48 || value > 57){
+            if(value < 96 || value > 105){
+                return false
+            }
+        }
+    }
+}
+
+export function validCnpjCpf(value){
+  if(value !== 8 && value !== 9 && value !== 189 && value !== 190 && value !== 191){
+      if(value < 48 || value > 57){
+          if(value < 96 || value > 105){
+              return false;
+          }
+      }
+  }
+}
+
 export function validTelphone(value){
    if(value !== 8 && value !== 9 && value !== 16 && value !== 57 && value !== 48 && value !== 189 && value !== 32){
        if(value < 48 || value > 57){
@@ -34,16 +54,6 @@ export function validTelphone(value){
 
 export function validZipCode(value){
     if(value !== 8 && value !== 9 && value !== 189){
-        if(value < 48 || value > 57){
-            if(value < 96 || value > 105){
-                return false
-            }
-        }
-    }
-}
-
-export function validCpf(value){
-    if(value !== 8 && value !== 9 && value !== 189 && value !== 190){
         if(value < 48 || value > 57){
             if(value < 96 || value > 105){
                 return false

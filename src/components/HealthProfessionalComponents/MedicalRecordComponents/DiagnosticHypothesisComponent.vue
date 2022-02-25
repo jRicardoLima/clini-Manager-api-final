@@ -40,6 +40,7 @@
                <DynamicLink 
                   :param="diagnosticHypotesis.files" 
                   :mostrar="showDiagnosticFiles"
+                  :multiple= "true"
                />
             </div>
         </AccordionTab>
@@ -55,6 +56,7 @@ import ManagerFiles from "@/services/ManagerFiles.js";
 import Editor from "primevue/editor";
 
 export default{
+    name: 'DianosticHypothesisComponent',
     components:{
         Accordion,
         AccordionTab,
@@ -63,9 +65,21 @@ export default{
         DynamicLink,
         Editor
     },
+    props:{
+      setInfoMedicalRecord: Function,
+      executeMedicalRecord: Boolean
+    },
     managerFiles: null,
     beforeMount(){
         this.managerFiles = new ManagerFiles(true);
+    },
+    watch:{
+        executeMedicalRecord(){
+            if(this.executeMedicalRecord == true){
+                this.diagnosticHypotesis.files = this.managerFiles.convertBaseToDownload();
+                this.setInfoMedicalRecord({name:this.$options.name,data:this.diagnosticHypotesis});
+            }
+        }
     }, 
     data(){
         return{
@@ -80,7 +94,6 @@ export default{
     methods:{
         showFiles(){
             this.diagnosticHypotesis.files = this.managerFiles.convertBaseToDownload();
-            console.log(this.diagnosticHypotesis.files);
             if(this.diagnosticHypotesis.files == null || this.diagnosticHypotesis.files <= 0){
                 console.log("Insira os Arquivos para fazer o upload");
             } else {

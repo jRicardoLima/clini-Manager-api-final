@@ -21,11 +21,23 @@ import ToolbarEditor from "@/components/ToolbarEditor";
 import Editor from "primevue/editor";
 
 export default{
+ name: 'DoctorPrescritionComponent',   
  components:{
      Accordion,
      AccordionTab,
      ToolbarEditor,
      Editor,
+ },
+ props:{
+   setInfoMedicalRecord: Function,
+   executeMedicalRecord: Boolean
+ },
+ watch:{
+     executeMedicalRecord(){
+         if(this.executeMedicalRecord == true){
+             this.setInfoMedicalRecord({name: this.$options.name,data:this.doctorPrescrition});
+         }
+     }
  },
  data(){
      return{
