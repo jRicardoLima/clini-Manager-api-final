@@ -292,7 +292,7 @@ export default {
         {
           label: "Cadastrar",
           command: () => {
-            this.$router.push({name:'patientNew'});
+            this.$router.push({name:'patientNew'}).catch(() => {});
           }
         },
         {

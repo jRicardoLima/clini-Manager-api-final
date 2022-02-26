@@ -2,7 +2,6 @@
     <SideBar 
       :visible.sync="$store.state.sideBarControl.open" 
       :baseZIndex="1000"
-      :dismissable="false"
       @hide="hideSideBar"
       >
        <PanelMenu :model="itemsMenus"/>   
