@@ -96,21 +96,30 @@ export default{
              {
                  label: 'Pesquisar',
                  command: () => {
+                    let response = [
+                        {
+                            id: 54,
+                            name: 'Sala 1',
+                            employee: {
+                                id: 26,
+                                name: 'Profissional saude teste',
+                                /** Outros dados do profissional de saúde */
 
+                            }
+
+                        }
+                    ];
+                    setTimeout(() => {
+                        this.setResultSearch(response,true);
+                      },3000);        
                  }
              },
              {
                  label: 'Cadastrar',
                  command: () => {
-
+                    this.$router.push({name:"roomNew"}).catch(() => {}); 
                  }
              },
-             {
-                 label: 'Status Salas',
-                 command: () => {
-
-                 }
-             }
          ],
         genericModalData:{
            headerName: '',

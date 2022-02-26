@@ -51,7 +51,6 @@ export default{
         ShortEmployeeComponent,
         ShortPatientComponent
     },
-
     props:{
         headerName: String,
         displayModal: Boolean,

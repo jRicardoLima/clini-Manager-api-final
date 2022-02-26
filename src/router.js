@@ -13,6 +13,7 @@ import ScheduleView from "@/views/ScheduleView";
 import QueueView from "@/views/QueueView";
 import FlowPaymentView from "@/views/FlowPayView";
 import RoomView from "@/views/RoomView";
+import store from "@/store/store";
 Vue.use(Router);
 
 const router = new Router({
@@ -111,7 +112,7 @@ const router = new Router({
                     component: RoomView,
                     name: 'room',
                     children:[
-
+                       {path:"novo",component: RoomView, name: "roomNew"}
                     ]
                 },
                 {
@@ -122,5 +123,11 @@ const router = new Router({
         }
     ]
 });
-
+router.beforeEach((to,from,next) => {
+ 
+if(store.state.sideBarControl.open == true){
+    store.state.sideBarControl.open = false;
+}
+ next();
+});
 export default router;

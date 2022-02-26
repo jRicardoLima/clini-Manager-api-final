@@ -39,7 +39,11 @@
          </Column>
 
          <Column header="Ações">
-            <template #body="slotsProps"></template>
+            <template #body="slotsProps">
+              <ul>
+                <OptionsTableRoomComponent :optionData="slotsProps"/>
+              </ul>
+            </template>
          </Column>
         </DataTable>
     </div>
@@ -49,6 +53,7 @@
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
+import OptionsTableRoomComponent from "@/components/RoomComponents/OptionsTableRoomComponent";
 import {FilterMatchMode} from "primevue/api";
 
 export default{
@@ -56,6 +61,7 @@ export default{
         DataTable,
         Column,
         InputText,
+        OptionsTableRoomComponent
     },
     created(){
         this.initFilters();
