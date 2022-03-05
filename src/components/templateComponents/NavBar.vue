@@ -19,6 +19,7 @@
 import Menubar from "primevue/menubar";
 import Button from "primevue/button";
 import SplitButton from "primevue/splitbutton";
+import UserService from "@/services/UserService";
 
 export default {
   components:{
@@ -26,31 +27,15 @@ export default {
     Button,
     SplitButton
   },
+  menuModel: null,
+  mounted(){
+    let axios = {};
+    this.menuModel = new UserService(this,axios);
+    this.itemsSplitButton = this.menuModel.getSplitButtonAccess();
+  },
   data(){
     return{
-      itemsSplitButton:[
-        {
-          label: "Alterar Usuário/Senha",
-          icon: "pi pi-user-edit",
-          command: () => {
-
-          },
-        },
-        {
-          label: "Gerenciar Usuário",
-          icon: "pi pi-user",
-          command: () => {
-
-          }
-        },
-        {
-          label: "Configuração Sistema",
-          icon: "pi pi-cog",
-          command: () => {
-
-          }
-        }
-      ]
+      itemsSplitButton: null,
     }
   },
   methods:{

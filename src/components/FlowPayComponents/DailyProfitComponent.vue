@@ -9,13 +9,13 @@
             </div>
             
             <div class="col-md-6">
-                <p>DÉBITO:</p>
+                <p>DÉBITO: </p>
                 <button class="btn btn-info btn-sm" @click="showDetails">Detalhes</button>
             </div>
         </div>
     </Fieldset>
     
-    <div v-show="showDetailsDailyProfit === true">
+    <div v-if="showDetailsDailyProfit === true">
         <DetailsDailyProfitComponent/>
     </div>
    </div>

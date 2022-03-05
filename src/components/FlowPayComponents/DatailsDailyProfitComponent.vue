@@ -10,8 +10,6 @@
       responsiveLayout="scroll"
       :expandableRowGroups="true"
       :expandedRowGroups.sync="expandedRowGroups"
-      @rowgroup-expand="onRowGroupExpand" 
-      @rowgroup-collapse="onRowGroupCollapse"
       :rows="4"
       paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
       currentPageReportTemplate="Mostrando {first} de {last} total de {totalRecords}"
@@ -124,10 +122,7 @@ export default{
               }
             },
         ];
-
         this.amountServices();
-
-        console.log(this.result);
 
     },
     data(){

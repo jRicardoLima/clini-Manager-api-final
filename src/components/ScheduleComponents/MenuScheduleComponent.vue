@@ -53,13 +53,9 @@
         </div>
 
         <div class="col-md-3">
-          <MultiSelect
-            v-model="schedule.healthProfessionalsSelected"
-            :options="healthProfessionals"
-            class="form-control"
-            optionLabel="name"
-            placeholder="Selecione os Profissionais"
-          />
+         <select class="form-select" style="padding-top:15px; padding-bottom: 15px">
+           <option value="">SELECIONE PROFISSIONAL SAÚDE</option>
+         </select>
         </div>
       </div>
 
@@ -82,7 +78,6 @@ import SplitButton from "primevue/splitbutton";
 import InputMask from "primevue/inputmask";
 import InputText from "primevue/inputtext";
 import Checkbox from "primevue/checkbox";
-import MultiSelect from "primevue/multiselect";
 import {allUpper, validCpf} from "@/helpers/Helpers";
 
 export default {
@@ -92,7 +87,6 @@ export default {
    InputMask,
    InputText,
    Checkbox,
-   MultiSelect
  },
   props:{
     setResultSearch: Function
@@ -344,7 +338,4 @@ export default {
 </script>
 
 <style scoped>
-.p-multiselect {
-  width: 19rem;
-}
 </style>

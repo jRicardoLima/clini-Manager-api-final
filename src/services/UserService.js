@@ -13,6 +13,32 @@ class UserService{
        console.log(user);
        this.dataUser ={} /** DADOS */ 
     }
+    getSplitButtonAccess(){
+      this.dataUser.splitMenus = [
+        {
+          label: "Alterar Usuário/Senha",
+          icon: "pi pi-user-edit",
+          command: () => {
+
+          },
+        },
+        {
+          label: "Gerenciar Usuário",
+          icon: "pi pi-user",
+          command: () => {
+
+          }
+        },
+        {
+          label: "Configuração Sistema",
+          icon: "pi pi-cog",
+          command: () => {
+            this.vm.$router.push({name: 'config_system'}).catch(() => {});
+          }
+        }
+      ];
+      return this.dataUser.splitMenus;
+    }
     getMenuAccess(){
         this.dataUser.menus = [
             {

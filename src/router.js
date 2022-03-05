@@ -13,7 +13,9 @@ import ScheduleView from "@/views/ScheduleView";
 import QueueView from "@/views/QueueView";
 import FlowPaymentView from "@/views/FlowPayView";
 import RoomView from "@/views/RoomView";
+import ConfigSystemView from "@/views/ConfigSystemView";
 import store from "@/store/store";
+
 Vue.use(Router);
 
 const router = new Router({
@@ -114,6 +116,12 @@ const router = new Router({
                     children:[
                        {path:"novo",component: RoomView, name: "roomNew"}
                     ]
+                },
+                {
+                    path: "Configruacao-sistema",
+                    component: ConfigSystemView,
+                    name: 'config_system',
+                    children:[]
                 },
                 {
                     path:'teste',

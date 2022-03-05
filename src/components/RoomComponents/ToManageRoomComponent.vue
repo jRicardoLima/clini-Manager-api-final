@@ -160,7 +160,7 @@ export default{
         },
         removeRoomConfig(){
            let id = this.__searchIdRoomConfig(this.selectedEmployee);
-                                          
+                                  
            this.room.listEmployee = this.room.listEmployee.filter(element => 
                                                                   element.health_professional_id != id);
             
@@ -168,9 +168,17 @@ export default{
 
         },
        __searchIdRoomConfig(value){
-          
-          let id = parseInt(value.slice(value.indexOf("Cód")+3,value.indexOf(":")));
-          return id;
+          if(value === null || value === undefined){
+              this.$toast.add({
+                    severity: 'warn',
+                    summary: 'INFORMAÇÃO DO SISTEMA',
+                    detail: 'SELECIONE UM PROFISSIONAL DE SAÚDE PARA REMOVER',
+                    life: 1500
+                });
+          } else {
+              let id = parseInt(value.slice(value.indexOf("Cód")+3,value.indexOf(":")));
+              return id;
+          }     
         }
     },
 }

@@ -69,13 +69,13 @@ export default{
  },
  methods:{
      clickEvent(info){
-
+    
          this.$store.state.dialog.show = true;
          this.$store.state.dialog.message = "Qual Ação Deseja Realizar?";
          this.$store.state.dialog.header = "Informação do Sistema";
          this.$store.state.dialog.buttons = true;
          this.$store.state.dialog.actionButtonOne = () => console.log(info.event.id);
-         this.$store.state.dialog.actionButtonTwo = () => console.log(info.event.title);
+         this.$store.state.dialog.actionButtonTwo = () => info.event.remove();
          this.$store.state.dialog.labelButtonOne = "Detalhes";
          this.$store.state.dialog.labelButtonTwo = "Remover";
      },

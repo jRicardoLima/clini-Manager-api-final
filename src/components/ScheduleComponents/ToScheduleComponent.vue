@@ -102,31 +102,7 @@
                 <option>SELECIONE A SALA</option>
               </select>
             </div>
-            <div class="row mt-2" v-if="genericModalData.displayModal === true">
-              <div class="col-md-12">
-                <GenericModal
-                 :headerName="genericModalData.headerName"
-                 :displayModal="genericModalData.displayModal"
-                 :closeModal="genericModalData.closeModal"
-                 :componentName="genericModalData.componentName"
-                 :data="genericModalData.data"
-                 :width="genericModalData.width"
-                 :position="genericModalData.position"
-                />
-              </div>
-            </div>
-
-            <div class="d-flex d-flex-row mt-2">
-              <button 
-                v-if="renderButtonTypePayment === true"
-                class="btn btn-info"
-                style="width: 80px"
-                @click="openModalGeneric('ShortTypePaymentComponent')"
-              >
-                 <i class="fas fa-money-bill-alt"></i>
-              </button>
-            </div>
-
+            
             <div class="d-flex d-flex-row mt-2">
               <button class="btn btn-success btn-sm" @click="addPatientSchedule">
                 <i class="fas fa-calendar-plus"></i>Adicionar Na Agenda
@@ -152,7 +128,6 @@
 <script>
 import Panel from "primevue/panel";
 import ScrollPanel from "primevue/scrollpanel";
-import GenericModal from "@/components/GenericModal";
 import {validString,formatDateFullCalendar} from "@/helpers/Helpers";
 import FullSchedule from "@/components/FullSchedule";
 
@@ -160,7 +135,6 @@ export default{
   components:{
     Panel,
     ScrollPanel,
-    GenericModal,
     FullSchedule
   },
   data(){
@@ -308,44 +282,16 @@ export default{
         return this.healthProfessionalData;
       }
     },
-    openModalGeneric(nameModal){
-      switch(nameModal){
-
-        case 'ShortTypePaymentComponent':
-          this.genericModalData.headerName = "Dados Pagamento";
-          this.genericModalData.componentName = "ShortTypePaymentComponent";
-          this.genericModalData.displayModal = true;
-          this.genericModalData.closeModal = this.closeModalGeneric;
-          this.genericModalData.data = null;
-          this.genericModalData.width = "920px";
-          this.genericModalData.position = "topright"
-        break;  
-
-        case 'ShortPatientComponent':
-          this.genericModalData.headerName = "Pesquisar Paciente";
-          this.genericModalData.componentName = "ShortPatientComponent";
-          this.genericModalData.displayModal = true;
-          this.genericModalData.closeModal = this.closeModalGeneric;
-          this.genericModalData.data = null;
-          this.genericModalData.width = "920px";
-          this.genericModalData.position = "topright"
-        break;  
-
-        case 'ShortEmployeeComponent':
-          this.genericModalData.headerName = "Pesquisar Funcionário";
-          this.genericModalData.componentName = "ShortEmployeeComponent";
-          this.genericModalData.displayModal = true;
-          this.genericModalData.closeModal = this.closeModalGeneric;
-          this.genericModalData.data = null;
-          this.genericModalData.width = "920px";
-          this.genericModalData.position = "topright";
-
-      }
-    },
-    closeModalGeneric(){
-      this.genericModalData.displayModal = false;
-    },
     addPatientSchedule(){
+      if(this.configScheduledHealthProfessional === null || this.configScheduledHealthProfessional.info === ""){
+        this.$toast.add({
+             severity: 'warn',
+             summary: 'INFORMAÇÃO DO SISTEMA',
+             detail: 'PREENCHA OS CAMPOS',
+             life: 2500
+           });
+         return;
+      }
       for(let element of this.configScheduledHealthProfessional.info){
           if((element.number+1) == (this.schedule.scheduling.getMonth()+1)){
                let validDate = element.availableDates
